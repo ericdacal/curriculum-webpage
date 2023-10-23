@@ -25,7 +25,7 @@ import porfolioImage8 from '../images/portfolio/portfolio-8.jpg';
 import porfolioImage9 from '../images/portfolio/portfolio-9.jpg';
 import porfolioImage10 from '../images/portfolio/portfolio-10.jpg';
 import porfolioImage11 from '../images/portfolio/portfolio-11.jpg';
-import profilepic from '../images/profilepic.jpg';
+import profilepic from '../images/profile.jpeg';
 import testimonialImage from '../images/testimonial.webp';
 import {
   About,
@@ -69,18 +69,16 @@ export type SectionId = (typeof SectionId)[keyof typeof SectionId];
  */
 export const heroData: Hero = {
   imageSrc: heroImage,
-  name: `I'm Tim Baker.`,
+  name: `I'm Eric Dacal.`,
   description: (
     <>
       <p className="prose-sm text-stone-200 sm:prose-base lg:prose-lg">
-        I'm a Victoria based <strong className="text-stone-100">Full Stack Software Engineer</strong>, currently working
-        at <strong className="text-stone-100">Instant Domains</strong> helping build a modern, mobile-first, domain
-        registrar and site builder.
+       I consider myself a responsible person, very <strong className="text-stone-100">creative</strong>, <strong className="text-stone-100">adaptable</strong> and always <strong className="text-stone-100">willing to learn</strong>. I've participated in a lot of group projects and I think I am a person who knows how to work with others and communicate with the team.
       </p>
       <p className="prose-sm text-stone-200 sm:prose-base lg:prose-lg">
-        In my free time time, you can catch me training in <strong className="text-stone-100">Muay Thai</strong>,
-        plucking my <strong className="text-stone-100">banjo</strong>, or exploring beautiful{' '}
-        <strong className="text-stone-100">Vancouver Island</strong>.
+        In my free time time, I love <strong className="text-stone-100">cinema</strong>,
+         <strong className="text-stone-100">photograpy</strong>, and {' '}
+        <strong className="text-stone-100">travel</strong>.
       </p>
     </>
   ),
@@ -104,15 +102,13 @@ export const heroData: Hero = {
  */
 export const aboutData: About = {
   profileImageSrc: profilepic,
-  description: `Use this bio section as your way of describing yourself and saying what you do, what technologies you like
-  to use or feel most comfortable with, describing your personality, or whatever else you feel like throwing
-  in.`,
+  description: `I consider myself a responsible person, very creative, adaptable and always willing to learn. I've participated in a lot of group projects and I think I am a person who knows how to work with others and communicate with the team.`,
   aboutItems: [
-    {label: 'Location', text: 'Victoria, BC', Icon: MapIcon},
-    {label: 'Age', text: '29', Icon: CalendarIcon},
-    {label: 'Nationality', text: 'Canadian / Irish', Icon: FlagIcon},
+    {label: 'Location', text: 'Barcelona, ES', Icon: MapIcon},
+    {label: 'Age', text: '28', Icon: CalendarIcon},
+    {label: 'Nationality', text: 'Spanish', Icon: FlagIcon},
     {label: 'Interests', text: 'Motorcycles, Muay Thai, Banjos', Icon: SparklesIcon},
-    {label: 'Study', text: 'University of Victoria', Icon: AcademicCapIcon},
+    {label: 'Study', text: ' Universitat Politècnica de Catalunya', Icon: AcademicCapIcon},
     {label: 'Employment', text: 'Instant Domains, inc.', Icon: BuildingOffice2Icon},
   ],
 };
