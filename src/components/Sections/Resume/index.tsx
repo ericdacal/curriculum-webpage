@@ -8,7 +8,7 @@ const Resume: FC = memo(() => {
   return (
     <Section className="bg-neutral-100" sectionId={SectionId.Resume}>
        <div className="flex justify-center items-center h-screen">
-          <a href={cvURL} download className="bg-orange-400 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded inline-block">
+          <a className="bg-orange-400 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded inline-block" download href={cvURL}>
             Download CV
           </a>
     </div>

@@ -1,5 +1,5 @@
+import {useRouter} from 'next/router';
 import {FC, memo} from 'react';
-import { useRouter } from 'next/router';
 
 import {SectionId} from '../../data/data';
 import Section from '../Layout/Section';
