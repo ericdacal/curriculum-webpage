@@ -1,6 +1,7 @@
-import { FC, memo } from 'react';
+import {FC, memo} from 'react';
+
+import {SectionId} from '../../../data/data';
 import Section from '../../Layout/Section';
-import { SectionId } from '../../../data/data';
 
 const Resume: FC = memo(() => {
   return (
