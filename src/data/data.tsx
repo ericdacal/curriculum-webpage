@@ -9,20 +9,10 @@ import {
 } from '@heroicons/react/24/outline';
 
 import GithubIcon from '../components/Icon/GithubIcon';
-import InstagramIcon from '../components/Icon/InstagramIcon';
 import LinkedInIcon from '../components/Icon/LinkedInIcon';
-import StackOverflowIcon from '../components/Icon/StackOverflowIcon';
 import heroImage from '../images/header-background.webp';
 import profilepic from '../images/profile.jpeg';
-import {
-  About,
-  ContactSection,
-  ContactType,
-  Hero,
-  HomepageMeta,
-  SkillGroup,
-  Social,
-} from './dataDef';
+import {About, ContactSection, ContactType, Hero, HomepageMeta, SkillGroup, Social} from './dataDef';
 
 /**
  * Page meta data
@@ -42,7 +32,7 @@ export const SectionId = {
   Portfolio: 'portfolio',
   Resume: 'resume',
   Skills: 'skills',
-  Stats: 'stats'
+  Stats: 'stats',
 } as const;
 
 export type SectionId = (typeof SectionId)[keyof typeof SectionId];
@@ -56,12 +46,14 @@ export const heroData: Hero = {
   description: (
     <>
       <p className="prose-sm text-stone-200 sm:prose-base lg:prose-lg">
-       I consider myself a responsible person, very <strong className="text-stone-100">creative</strong>, <strong className="text-stone-100">adaptable</strong> and always <strong className="text-stone-100">willing to learn</strong>. I've participated in a lot of group projects and I think I am a person who knows how to work with others and communicate with the team.
+        I consider myself a responsible person, very <strong className="text-stone-100">creative</strong>,{' '}
+        <strong className="text-stone-100">adaptable</strong> and always{' '}
+        <strong className="text-stone-100">willing to learn</strong>. I've participated in a lot of group projects and I
+        think I am a person who knows how to work with others and communicate with the team.
       </p>
       <p className="prose-sm text-stone-200 sm:prose-base lg:prose-lg">
         In my free time time, I love <strong className="text-stone-100">cinema</strong>,
-         <strong className="text-stone-100">photograpy</strong>, and {' '}
-        <strong className="text-stone-100">travel</strong>.
+        <strong className="text-stone-100">photograpy</strong>, and <strong className="text-stone-100">travel</strong>.
       </p>
     </>
   ),
@@ -90,9 +82,9 @@ export const aboutData: About = {
     {label: 'Location', text: 'Barcelona, ES', Icon: MapIcon},
     {label: 'Age', text: '28', Icon: CalendarIcon},
     {label: 'Nationality', text: 'Spanish', Icon: FlagIcon},
-    {label: 'Interests', text: 'Motorcycles, Muay Thai, Banjos', Icon: SparklesIcon},
+    {label: 'Interests', text: 'Photography, Cinema, Travel', Icon: SparklesIcon},
     {label: 'Study', text: ' Universitat Politècnica de Catalunya', Icon: AcademicCapIcon},
-    {label: 'Employment', text: 'Instant Domains, inc.', Icon: BuildingOffice2Icon},
+    {label: 'Employment', text: 'Horizon Games', Icon: BuildingOffice2Icon},
   ],
 };
 
@@ -185,13 +177,8 @@ export const contact: ContactSection = {
       href: 'https://www.google.es/maps/place/Barcelona/@41.5377064,1.8530945,11.48z/data=!4m6!3m5!1s0x12a49816718e30e5:0x44b0fb3d4f47660a!8m2!3d41.3873974!4d2.168568!16zL20vMDFmNjI?entry=ttu',
     },
     {
-      type: ContactType.Instagram,
-      text: '@tbakerx',
-      href: 'https://www.instagram.com/tbakerx/',
-    },
-    {
       type: ContactType.Github,
-      text: 'tbakerx',
+      text: 'ericdacal',
       href: 'https://github.com/ericdacal',
     },
   ],
@@ -202,7 +189,5 @@ export const contact: ContactSection = {
  */
 export const socialLinks: Social[] = [
   {label: 'Github', Icon: GithubIcon, href: 'https://github.com/ericdacal'},
-  {label: 'Stack Overflow', Icon: StackOverflowIcon, href: 'https://stackoverflow.com/users/8553186/tim-baker'},
   {label: 'LinkedIn', Icon: LinkedInIcon, href: 'https://www.linkedin.com/in/erdasa'},
-  {label: 'Instagram', Icon: InstagramIcon, href: 'https://www.instagram.com/reactresume/'}
 ];

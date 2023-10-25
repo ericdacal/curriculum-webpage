@@ -1,26 +1,40 @@
-import {FC, memo} from 'react';
-
+import React, {FC, Fragment, memo, useEffect} from 'react';
+import {Unity, useUnityContext} from 'react-unity-webgl';
 
 const Portfolio: FC = memo(() => {
-	return (
-		<div>
-		  PortfolioPage
-		  {/*<h1>My Unity WebGL Portfolio</h1>
-		  
-		  <div id="unityContainer" style={{ width: "960px", height: "600px", margin: "auto", backgroundColor: "#000000" }}>
-			<canvas className="emscripten" id="canvas" onContextMenu={(event) => event.preventDefault()}></canvas>
-			<br />
-		  </div>
-	
-		  <script src="/unityWebGL/UnityLoader.js"></script>
-		  <script>
-			{`
-			  var gameInstance = UnityLoader.instantiate("unityContainer", "/unityWebGL/Build.json", { onProgress: UnityProgress });
-			`}
-		  </script>*/}
-		</div>
-	  );
+  const unityConfig = React.useMemo(() => ({
+    loaderUrl: 'PortfolioWeb/Build/PortfolioWeb.loader.js',
+    dataUrl: 'PortfolioWeb/Build/PortfolioWeb.data.br',
+    frameworkUrl: 'PortfolioWeb/Build/PortfolioWeb.framework.js.br',
+    codeUrl: 'PortfolioWeb/Build/PortfolioWeb.wasm.br',
+  }), []);
 
+  const {unityProvider, requestFullscreen, requestPointerLock} = useUnityContext(unityConfig);
+
+  const unityStyle = React.useMemo(() => ({
+    height: 600, 
+    width: 800
+  }), []);
+
+  useEffect(() => {
+    document.addEventListener('click', requestPointerLock);
+    return () => {
+      document.removeEventListener('click', requestPointerLock);
+    };
+  }, [requestPointerLock]);
+
+  function handleClickEnterFullscreen() {
+    requestFullscreen(true);
+  }
+
+  return (
+    <Fragment>
+      <div className="center-container">
+        <Unity style={unityStyle} unityProvider={unityProvider} />
+        <button onClick={handleClickEnterFullscreen}>Enter Fullscreen</button>
+      </div>
+    </Fragment>
+  );
 });
+
 export default Portfolio;
-  

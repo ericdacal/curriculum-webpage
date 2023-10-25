@@ -1,4 +1,4 @@
-import {BoltIcon, ChevronUpIcon} from '@heroicons/react/24/solid';
+import {ChevronUpIcon} from '@heroicons/react/24/solid';
 import {FC, memo} from 'react';
 
 import {SectionId} from '../../data/data';
@@ -17,11 +17,6 @@ const Footer: FC = memo(() => (
       <div className="flex gap-x-4 text-neutral-500">
         <Socials />
       </div>
-      <a
-        className="-m-2 flex items-center gap-x-1 rounded-md p-2 ring-yellow focus:outline-none focus:ring-2"
-        href="https://reactresume.com">
-        <BoltIcon className="h-5 w-5 text-yellow" />
-      </a>
     </div>
   </div>
 ));

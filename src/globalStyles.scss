@@ -49,3 +49,18 @@ th {
 th {
   font-weight: 600;
 }
+
+.unityScreen {
+  display: flex;
+  justify-content: center;  /* Horizontally center */
+  align-items: center;      /* Vertically center */
+  height: 100vh;            /* Take full viewport height */
+}
+
+.center-container {
+  display: flex;
+  flex-direction: column; /* Stack children vertically */
+  justify-content: center; /* Center children vertically */
+  align-items: center; /* Center children horizontally */
+  height: 100vh; /* Full height of the viewport */
+}
