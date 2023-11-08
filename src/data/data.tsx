@@ -13,13 +13,13 @@ import LinkedInIcon from '../components/Icon/LinkedInIcon';
 import heroImage from '../images/header-background.webp';
 import profilepic from '../images/profile.jpeg';
 import {About, ContactSection, ContactType, Hero, HomepageMeta, SkillGroup, Social} from './dataDef';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 /**
  * Page meta data
  */
 export const homePageMeta: HomepageMeta = {
-  title: 'React Resume Template',
-  description: "Example site built with Tim Baker's react resume template",
+  title: 'Eric Dacal Sánchez',
+  description: "Resume Eric Dacal Sánchez",
 };
 
 /**

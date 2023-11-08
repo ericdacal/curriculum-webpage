@@ -1,4 +1,5 @@
 import 'tailwindcss/tailwind.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import '../globalStyles.scss';
 
 import type {AppProps} from 'next/app';
