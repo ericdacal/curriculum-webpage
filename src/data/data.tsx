@@ -1,3 +1,5 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import {
   AcademicCapIcon,
   ArrowDownTrayIcon,
@@ -13,13 +15,12 @@ import LinkedInIcon from '../components/Icon/LinkedInIcon';
 import heroImage from '../images/header-background.webp';
 import profilepic from '../images/profile.jpeg';
 import {About, ContactSection, ContactType, Hero, HomepageMeta, SkillGroup, Social} from './dataDef';
-import 'bootstrap/dist/css/bootstrap.min.css';
 /**
  * Page meta data
  */
 export const homePageMeta: HomepageMeta = {
   title: 'Eric Dacal Sánchez',
-  description: "Resume Eric Dacal Sánchez",
+  description: 'Resume Eric Dacal Sánchez',
 };
 
 /**

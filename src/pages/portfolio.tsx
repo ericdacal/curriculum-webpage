@@ -2,19 +2,25 @@ import React, {FC, Fragment, memo, useEffect} from 'react';
 import {Unity, useUnityContext} from 'react-unity-webgl';
 
 const Portfolio: FC = memo(() => {
-  const unityConfig = React.useMemo(() => ({
-    loaderUrl: 'PortfolioWeb/Build/PortfolioWeb.loader.js',
-    dataUrl: 'PortfolioWeb/Build/PortfolioWeb.data.br',
-    frameworkUrl: 'PortfolioWeb/Build/PortfolioWeb.framework.js.br',
-    codeUrl: 'PortfolioWeb/Build/PortfolioWeb.wasm.br',
-  }), []);
+  const unityConfig = React.useMemo(
+    () => ({
+      loaderUrl: 'PortfolioWeb/Build/PortfolioWeb.loader.js',
+      dataUrl: 'PortfolioWeb/Build/PortfolioWeb.data.br',
+      frameworkUrl: 'PortfolioWeb/Build/PortfolioWeb.framework.js.br',
+      codeUrl: 'PortfolioWeb/Build/PortfolioWeb.wasm.br',
+    }),
+    [],
+  );
 
   const {unityProvider, requestFullscreen, requestPointerLock} = useUnityContext(unityConfig);
 
-  const unityStyle = React.useMemo(() => ({
-    height: 600, 
-    width: 800
-  }), []);
+  const unityStyle = React.useMemo(
+    () => ({
+      height: 600,
+      width: 800,
+    }),
+    [],
+  );
 
   useEffect(() => {
     document.addEventListener('click', requestPointerLock);
