@@ -23,7 +23,7 @@ const Hero: FC = memo(() => {
               <img alt="First slide" className="d-block w-100 h-full object-cover" src="header-background.webp" />
             </div>
             <div className="carousel-item">
-              <img alt="Second slide" className="d-block w-100 h-full object-cover" src="background.jpeg" />
+              <img alt="Second slide" className="d-block w-100 h-full object-cover" src="header-background.webp" />
             </div>
             {/* Add more carousel-item divs here for additional images */}
           </div>

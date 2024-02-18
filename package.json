@@ -20,6 +20,7 @@
     "next": "^13.4.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "three": "^0.161.0",
     "ts-pattern": "^5.0.4"
   },
   "devDependencies": {
@@ -29,6 +30,7 @@
     "@types/node": "^20.4.5",
     "@types/react": "^18.2.18",
     "@types/tailwindcss": "^3.1.0",
+    "@types/three": "^0.161.2",
     "@types/webpack-env": "^1.18.1",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^6.2.1",
