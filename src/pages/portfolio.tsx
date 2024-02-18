@@ -1,33 +1,52 @@
-import React, { FC, useEffect, useRef, memo } from 'react';
+import React, { FC, useEffect, useRef, useState, memo } from 'react';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+//import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const Portfolio: FC = memo(() => {
   const mountRef = useRef<HTMLDivElement | null>(null);
+  // State to manage the loading screen visibility
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Scene setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+    let radius = 1; // Example value, adjust as needed
+    let angle = 0; // Initial angle
+    let height = 1; // Height from the base, creates a diagonal angle
+    let angleIncrement = 0.001; // Speed of the orbit
+    const minAngle = 0; // Minimum angle, could be 0 or any other value
+    const maxAngle = Math.PI/2; // Maximum angle, half orbit, adjust as needed
+
+    camera.position.set(radius * Math.sin(angle), height, radius * Math.cos(angle));
+    camera.lookAt(scene.position);
+
+
+
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     if (mountRef.current) {
       mountRef.current.appendChild(renderer.domElement);
     }
 
-    // OrbitControls setup
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.target.set(0, 0, 0); // Set the position of the orbit target (the point the camera looks at)
-    controls.update(); // Required if controls.enableDamping or controls.autoRotate are set to true
+      // Equirectangular background
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.load('background-scene.png', function(texture) {
+      const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+      rt.fromEquirectangularTexture(renderer, texture);
+      scene.background = rt.texture;
+    });
 
     const loader = new THREE.ObjectLoader();
     loader.load(
       'scene.json', // The path to your exported scene file
       function (object) {
         scene.add(object);
-        // Optionally, adjust controls to focus on this object or its position
-        controls.target.copy(object.position);
-        controls.update();
+        //controls.target.copy(object.position);
+        //controls.update();
+        // Hide the loading screen once the scene is fully loaded
+        setIsLoading(false);
       },
       function (xhr) {
         console.log((xhr.loaded / xhr.total * 100) + '% loaded');
@@ -38,16 +57,28 @@ const Portfolio: FC = memo(() => {
     );
 
     // Lighting
-    const ambientLight = new THREE.AmbientLight(0x404040); // Soft white light
+    const ambientLight = new THREE.AmbientLight(0x404040);
     scene.add(ambientLight);
 
     // Camera position
-    camera.position.set(0, 0.2, 1); // Adjust as needed
+    camera.position.set(0, 0.2, 1);
 
     // Animation loop
     const animate = function () {
       requestAnimationFrame(animate);
-      controls.update(); // Only required if controls.enableDamping = true, or if controls.autoRotate = true
+      // Update the angle for the orbit
+      angle += angleIncrement;
+
+      // Reverse direction at limits
+      if (angle <= minAngle || angle >= maxAngle) {
+        angleIncrement = -angleIncrement; // Reverse the increment direction
+      }
+
+      camera.position.x = radius * Math.sin(angle);
+      camera.position.z = radius * Math.cos(angle);
+      camera.position.y = height;
+      camera.lookAt(scene.position);
+
       renderer.render(scene, camera);
     };
 
@@ -55,7 +86,13 @@ const Portfolio: FC = memo(() => {
   }, []);
 
   return (
-    <div ref={mountRef} className="portfolio-container"></div>
+    <div>
+      {/* Loading screen element */}
+      {isLoading && <div className="loading-screen">Loading...</div>}
+
+      {/* The container for the Three.js scene */}
+      <div ref={mountRef} className="portfolio-container"></div>
+    </div>
   );
 });
 
