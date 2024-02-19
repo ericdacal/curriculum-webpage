@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState, memo } from 'react';
+import React, {FC, memo,useEffect, useRef, useState} from 'react';
 import * as THREE from 'three';
 //import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
@@ -6,15 +6,28 @@ const Portfolio: FC = memo(() => {
   const mountRef = useRef<HTMLDivElement | null>(null);
   // State to manage the loading screen visibility
   const [isLoading, setIsLoading] = useState(true);
+   // Handler for the left arrow click
+  const handleLeftArrowClick = () => {
+    console.log('Left arrow clicked');
+    // Implement what happens when the left arrow is clicked
+    // For example, rotate the scene, move the camera, etc.
+  };
+
+  // Handler for the right arrow click
+  const handleRightArrowClick = () => {
+    console.log('Right arrow clicked');
+    // Implement what happens when the right arrow is clicked
+    // For example, rotate the scene, move the camera, etc.
+  };
 
   useEffect(() => {
     // Scene setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 
-    let radius = 1; // Example value, adjust as needed
+    const radius = 1; // Example value, adjust as needed
     let angle = 0; // Initial angle
-    let height = 1; // Height from the base, creates a diagonal angle
+    const height = 1; // Height from the base, creates a diagonal angle
     let angleIncrement = 0.001; // Speed of the orbit
     const minAngle = 0; // Minimum angle, could be 0 or any other value
     const maxAngle = Math.PI/2; // Maximum angle, half orbit, adjust as needed
@@ -22,8 +35,7 @@ const Portfolio: FC = memo(() => {
     camera.position.set(radius * Math.sin(angle), height, radius * Math.cos(angle));
     camera.lookAt(scene.position);
 
-
-
+   
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     if (mountRef.current) {
@@ -91,7 +103,32 @@ const Portfolio: FC = memo(() => {
       {isLoading && <div className="loading-screen">Loading...</div>}
 
       {/* The container for the Three.js scene */}
-      <div ref={mountRef} className="portfolio-container"></div>
+      <div className="portfolio-container" ref={mountRef}></div>
+      <button className="arrow left-arrow" onClick={handleLeftArrowClick}>&lt;</button>
+      <button className="arrow right-arrow" onClick={handleRightArrowClick}>&gt;</button>
+      <style>
+        {`
+          .portfolio-container {
+            position: relative;
+            /* Your container styles */
+          }
+          .arrow {
+            position: fixed;
+            top: 50%;
+            background-color: transparent;
+            border: none;
+            font-size: 72px;
+            cursor: pointer;
+            z-index: 10;
+          }
+          .left-arrow {
+            left: 10px;
+          }
+          .right-arrow {
+            right: 10px;
+          }
+        `}
+      </style>
     </div>
   );
 });
