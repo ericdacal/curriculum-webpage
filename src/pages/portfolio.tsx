@@ -111,8 +111,8 @@ const Portfolio: FC = memo(() => {
     const animateCameraToFrontView = () => {
       // Camera Config
       isOrbitingRef.current = false; 
-      const frontViewPosition = new THREE.Vector3(0, 0.75, 0.25); // Example position in front of the object
-      const lookAtPosition = new THREE.Vector3(0, 0, 0); // Assuming the object is at the origin
+      const frontViewPosition = new THREE.Vector3(0, 0.47, 0.17); // Example position in front of the object
+      const lookAtPosition = new THREE.Vector3(0, 0, -1); // Assuming the object is at the origin
       const duration = 1000; // Duration of animation in milliseconds
       
       const startTime = performance.now();
@@ -181,7 +181,7 @@ const Portfolio: FC = memo(() => {
       {/* Loading screen element */}
       {isLoading && (
         <div className={`loader-screen ${!isLoading ? 'fade-out' : ''}`}>
-          <h2>Portfolio</h2>
+          <h2>Loading</h2>
           <div className="slider"></div>
         </div>
       )}
