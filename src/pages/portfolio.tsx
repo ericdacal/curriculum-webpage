@@ -1,5 +1,6 @@
 import React, {FC, memo,useEffect, useRef, useState} from 'react';
 import * as THREE from 'three';
+import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 //import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const Portfolio: FC = memo(() => {
@@ -7,6 +8,7 @@ const Portfolio: FC = memo(() => {
   // State to manage the loading screen visibility
   const [isLoading, setIsLoading] = useState(true);
   const isOrbitingRef = useRef(true);
+  
    // Handler for the left arrow click
   const handleLeftArrowClick = () => {
     console.log('Left arrow clicked');
@@ -28,16 +30,21 @@ const Portfolio: FC = memo(() => {
     }
 
     const animateCameraToFrontView = () => {
+      
+      // Camera Config
       isOrbitingRef.current = false; 
       const frontViewPosition = new THREE.Vector3(0, 0.75, 0.25); // Example position in front of the object
       const lookAtPosition = new THREE.Vector3(0, 0, 0); // Assuming the object is at the origin
       const duration = 1000; // Duration of animation in milliseconds
+      
       const startTime = performance.now();
     
       const initialPosition = camera.position.clone();
       const initialQuaternion = camera.quaternion.clone();
       const targetQuaternion = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, 0)); // Front view orientation
-    
+      
+
+
       function animate() {
         const elapsedTime = performance.now() - startTime;
         const fraction = elapsedTime / duration;
@@ -76,10 +83,15 @@ const Portfolio: FC = memo(() => {
    
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ReinhardToneMapping;
     if (mountRef.current) {
       mountRef.current.appendChild(renderer.domElement);
       mountRef.current.addEventListener('click', onClick);
     }
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+
 
       // Equirectangular background
     const textureLoader = new THREE.TextureLoader();
@@ -88,6 +100,7 @@ const Portfolio: FC = memo(() => {
       rt.fromEquirectangularTexture(renderer, texture);
       scene.background = rt.texture;
     });
+
 
     const loader = new THREE.ObjectLoader();
     loader.load(
@@ -106,11 +119,6 @@ const Portfolio: FC = memo(() => {
         console.log('An error happened', error);
       }
     );
-
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0x404040);
-    scene.add(ambientLight);
-
     // Camera position
     camera.position.set(0, 0.2, 1);
 
