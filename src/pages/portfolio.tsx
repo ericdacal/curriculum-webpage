@@ -6,6 +6,7 @@ const Portfolio: FC = memo(() => {
   const mountRef = useRef<HTMLDivElement | null>(null);
   // State to manage the loading screen visibility
   const [isLoading, setIsLoading] = useState(true);
+  const isOrbitingRef = useRef(true);
    // Handler for the left arrow click
   const handleLeftArrowClick = () => {
     console.log('Left arrow clicked');
@@ -21,6 +22,43 @@ const Portfolio: FC = memo(() => {
   };
 
   useEffect(() => {
+    const onClick = () => {
+      // Call the function to animate the camera
+      animateCameraToFrontView();
+    }
+
+    const animateCameraToFrontView = () => {
+      isOrbitingRef.current = false; 
+      const frontViewPosition = new THREE.Vector3(0, 0.75, 0.25); // Example position in front of the object
+      const lookAtPosition = new THREE.Vector3(0, 0, 0); // Assuming the object is at the origin
+      const duration = 1000; // Duration of animation in milliseconds
+      const startTime = performance.now();
+    
+      const initialPosition = camera.position.clone();
+      const initialQuaternion = camera.quaternion.clone();
+      const targetQuaternion = new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, 0)); // Front view orientation
+    
+      function animate() {
+        const elapsedTime = performance.now() - startTime;
+        const fraction = elapsedTime / duration;
+    
+        if (fraction < 1) {
+          // Interpolate position
+          camera.position.lerpVectors(initialPosition, frontViewPosition, fraction);
+          // Interpolate rotation
+          camera.quaternion.slerpQuaternions(initialQuaternion, targetQuaternion, fraction);
+          requestAnimationFrame(animate);
+        } else {
+          // Ensure final position and rotation are set
+          camera.position.copy(frontViewPosition);
+          camera.quaternion.copy(targetQuaternion);
+        }
+        camera.lookAt(lookAtPosition);
+        renderer.render(scene, camera);
+      }
+    
+      animate();
+    };
     // Scene setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -40,6 +78,7 @@ const Portfolio: FC = memo(() => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     if (mountRef.current) {
       mountRef.current.appendChild(renderer.domElement);
+      mountRef.current.addEventListener('click', onClick);
     }
 
       // Equirectangular background
@@ -75,25 +114,27 @@ const Portfolio: FC = memo(() => {
     // Camera position
     camera.position.set(0, 0.2, 1);
 
-    // Animation loop
+    // Animation loop (Orbit around center object)
     const animate = function () {
       requestAnimationFrame(animate);
-      // Update the angle for the orbit
-      angle += angleIncrement;
-
-      // Reverse direction at limits
-      if (angle <= minAngle || angle >= maxAngle) {
-        angleIncrement = -angleIncrement; // Reverse the increment direction
+    
+      if (isOrbitingRef.current) {
+        // Update the angle for the orbit
+        angle += angleIncrement;
+    
+        // Reverse direction at limits
+        if (angle <= minAngle || angle >= maxAngle) {
+          angleIncrement = -angleIncrement; // Reverse the increment direction
+        }
+    
+        camera.position.x = radius * Math.sin(angle);
+        camera.position.z = radius * Math.cos(angle);
+        camera.position.y = height;
+        camera.lookAt(scene.position);
       }
-
-      camera.position.x = radius * Math.sin(angle);
-      camera.position.z = radius * Math.cos(angle);
-      camera.position.y = height;
-      camera.lookAt(scene.position);
-
+    
       renderer.render(scene, camera);
     };
-
     animate();
   }, []);
 
@@ -122,10 +163,10 @@ const Portfolio: FC = memo(() => {
             z-index: 10;
           }
           .left-arrow {
-            left: 10px;
+            left: 25%;
           }
           .right-arrow {
-            right: 10px;
+            right: 25%;
           }
         `}
       </style>
