@@ -1,32 +1,33 @@
-import React, {FC, memo,useEffect, useRef, useState} from 'react';
+import React, {FC, memo,useEffect, useRef} from 'react';
 import * as THREE from 'three';
 import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
+
+
 //import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const Portfolio: FC = memo(() => {
   const mountRef = useRef<HTMLDivElement | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  //const [isLoading, setIsLoading] = useState(true);
   const isOrbitingRef = useRef(true);
 
-  /////// HTML HANDLERS ///////
-   // Handler for the left arrow click
-  const handleLeftArrowClick = () => {
-    console.log('Left arrow clicked');
-    // Implement what happens when the left arrow is clicked
-    // For example, rotate the scene, move the camera, etc.
-  };
+  // /////// HTML HANDLERS ///////
+  //  // Handler for the left arrow click
+  // const handleLeftArrowClick = () => {
+  //   console.log('Left arrow clicked');
+  //   // Implement what happens when the left arrow is clicked
+  //   // For example, rotate the scene, move the camera, etc.
+  // };
 
-  // Handler for the right arrow click
-  const handleRightArrowClick = () => {
-    console.log('Right arrow clicked');
-    // Implement what happens when the right arrow is clicked
-    // For example, rotate the scene, move the camera, etc.
-  };
-  ////////////////////////////
+  // // Handler for the right arrow click
+  // const handleRightArrowClick = () => {
+  //   console.log('Right arrow clicked');
+  //   // Implement what happens when the right arrow is clicked
+  //   // For example, rotate the scene, move the camera, etc.
+  // };
+  // ////////////////////////////
   
   
   useEffect(() => {
-    
     
     /////// THREE.JS related EVENTS ///////
     const onClick = () => {
@@ -92,7 +93,7 @@ const Portfolio: FC = memo(() => {
         //controls.update();
         // Hide the loading screen once the scene is fully loaded
         setTimeout(() => {
-          setIsLoading(false); // Hide loader after loading is complete
+          //setIsLoading(false); // Hide loader after loading is complete
         }, 20000); 
       },
       function (xhr) {
@@ -177,43 +178,10 @@ const Portfolio: FC = memo(() => {
   }, []);
 
   return (
-    <div>
-      {/* Loading screen element */}
-      {isLoading && (
-        <div className={`loader-screen ${!isLoading ? 'fade-out' : ''}`}>
-          <h2>Loading</h2>
-          <div className="slider"></div>
-        </div>
-      )}
-
-
-      {/* The container for the Three.js scene */}
-      <div className="portfolio-container" ref={mountRef}></div>
-      <button className="arrow left-arrow" onClick={handleLeftArrowClick}>&lt;</button>
-      <button className="arrow right-arrow" onClick={handleRightArrowClick}>&gt;</button>
-      <style>
-        {`
-          .portfolio-container {
-            position: relative;
-            /* Your container styles */
-          }
-          .arrow {
-            position: fixed;
-            top: 50%;
-            background-color: transparent;
-            border: none;
-            font-size: 72px;
-            cursor: pointer;
-            z-index: 10;
-          }
-          .left-arrow {
-            left: 25%;
-          }
-          .right-arrow {
-            right: 25%;
-          }
-        `}
-      </style>
+    <div className='screen'>
+      <div className='crt loading-text'>
+        Loading
+      </div>
     </div>
   );
 });
