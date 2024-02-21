@@ -180,7 +180,7 @@ const Portfolio: FC = memo(() => {
   return (
     <div className='screen'>
       <div className='crt loading-text'>
-        Loading
+        <h1>Loading...</h1>
       </div>
     </div>
   );

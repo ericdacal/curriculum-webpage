@@ -50,13 +50,6 @@ th {
   font-weight: 600;
 }
 
-.unityScreen {
-  display: flex;
-  justify-content: center;  /* Horizontally center */
-  align-items: center;      /* Vertically center */
-  height: 100vh;            /* Take full viewport height */
-}
-
 .center-container {
   display: flex;
   flex-direction: column; /* Stack children vertically */
@@ -73,34 +66,6 @@ th {
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
-.loader-screen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column; /* Stack children vertically */
-  background-color: #000; /* Or any color you prefer */
-  color: #00ff00; /* Or any color you prefer */
-  font-family: 'Press Start 2P', cursive; /* Pixel art font */
-  font-size: 50px;
-  transition: opacity 5s ease-out;
-  z-index: 1000;
-}
-
-
-
-.slider {
-  height: 10px; /* Make the slider thicker */
-  background-color: #00ff00; /* Bright green */
-  animation: slide 200s linear;
-  border: 1px solid #fff; /* Add a border for more defined edges */
-  margin-top: 100px;
-}
 
 /* Adjust the slide animation for a more retro look, if desired */
 @keyframes slide {
@@ -280,7 +245,7 @@ th {
 .crt {
   animation: textShadow 1.6s infinite;
   color: #00ff00;
-  font-size: 75px;
+  font-size: 10vh;
   font-family: 'Press Start 2P', cursive;
   user-select: none;
 }
@@ -309,10 +274,12 @@ th {
   50% { border-color: #00ff00; } /* Or any color you prefer */
 }
 
-.loading-text {
+.loading-text h1 {
+  width: fit-content;
+  letter-spacing: .25em;
   border-right: 2px solid #00ff00; /* Simulates the cursor */
   white-space: nowrap; /* Ensures the text doesn't wrap */
   overflow: hidden; /* Hides the text as the "typing" animation progresses */
-  animation: typing 12s steps(7, end), blinkCursor 0.75s step-end infinite;
+  animation: typing 15s steps(10, end), blinkCursor 0.75s step-end infinite;
   /* Adjust the steps(30, end) based on the length of your text to simulate typing speed */
 }
