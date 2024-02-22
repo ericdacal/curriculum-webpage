@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -65,7 +66,6 @@ th {
   overflow: hidden; /* Prevent scrolling within the component */
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 /* Adjust the slide animation for a more retro look, if desired */
 @keyframes slide {
