@@ -1,13 +1,14 @@
-import React, {FC, memo,useEffect, useRef} from 'react';
+import React, {FC, memo,useEffect, useRef, useState} from 'react';
 import * as THREE from 'three';
-import {RoomEnvironment} from 'three/examples/jsm/environments/RoomEnvironment.js';
 
+import {loadModelAtPosition,ModelType} from '../utils/three-utils';
 
 //import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const Portfolio: FC = memo(() => {
   const mountRef = useRef<HTMLDivElement | null>(null);
-  //const [isLoading, setIsLoading] = useState(true);
+  const [isSceneLoaded, setIsSceneLoaded] = useState(false);
+  const [isAnimationDone, setIsAnimationDone] = useState(false);
   const isOrbitingRef = useRef(true);
 
   // /////// HTML HANDLERS ///////
@@ -25,14 +26,28 @@ const Portfolio: FC = memo(() => {
   //   // For example, rotate the scene, move the camera, etc.
   // };
   // ////////////////////////////
-  
+
   
   useEffect(() => {
-    
+    const currentRef = mountRef.current;
+     /////// Loading Text ///////
+    const loadingText = document.querySelector('.loading-text h1');
+    if (loadingText) {
+      const handleAnimationEnd = () => setIsAnimationDone(true);
+      loadingText.addEventListener('animationend', handleAnimationEnd);
+    }
+    ////////////////////////////////
+
     /////// THREE.JS related EVENTS ///////
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
     const onClick = () => {
-      // Call the function to animate the camera
       animateCameraToFrontView();
+      if (currentRef) {
+        currentRef.addEventListener('click', onClickRaycast); 
+        currentRef.removeEventListener('click', onClick);
+      }
     }
     function onWindowResize() {
       const width = window.innerWidth;
@@ -45,6 +60,29 @@ const Portfolio: FC = memo(() => {
       // If you're using a composer, uncomment the next line
       // composer.setSize(width, height);
     }
+
+    const onClickRaycast = (event: MouseEvent) => {
+      // Calculate mouse position in normalized device coordinates (-1 to +1) for both components
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+    
+      // Update the picking ray with the camera and mouse position
+      raycaster.setFromCamera(mouse, camera);
+    
+      // Calculate objects intersecting the picking ray
+      const intersects = raycaster.intersectObjects(scene.children, true);
+      let isArcadeMachineClicked = false
+      for (const intersect of intersects) {
+        isArcadeMachineClicked = isArcadeMachineClicked || intersect.object.name === 'ArcadeMachine'
+      }
+      if (!isArcadeMachineClicked) {
+        isOrbitingRef.current = true;
+        if (currentRef) {
+          currentRef.addEventListener('click', onClick); 
+          currentRef.removeEventListener('click', onClickRaycast);
+        }
+      }
+    };
     ////////////////////////////
     
     /////// SCENE SETUP ///////
@@ -59,20 +97,51 @@ const Portfolio: FC = memo(() => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.toneMapping = THREE.ReinhardToneMapping;
+    renderer.shadowMap.enabled = true;
 
-    const pmremGenerator = new THREE.PMREMGenerator(renderer);
-    scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+
+    // const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    // scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+    ////////////////////////////
+    
+
+    
+    const materialParams = {color: 0xFFFFFF, metalness: 1.0} 
+    const modelType: ModelType = 'gltf';
+    const boxType: ModelType = 'box';
+    /////// MODELS LOAD  ///////
+    const modelsToLoad = [
+      {type: modelType, path: "arcade_machine.glb", position: new THREE.Vector3(0,0,0), rotation: new THREE.Euler(0,(3*Math.PI)/2), scale: new THREE.Vector3(0.1,0.1,0.1), material: materialParams},
+      {type: boxType, path: '', position: new THREE.Vector3(0, -0.1, 0), rotation: new THREE.Euler(Math.PI/2, 0, 0), scale: new THREE.Vector3(100, 100, 0.1), material: materialParams},
+    ];
+    Promise.all(modelsToLoad.map(model => loadModelAtPosition(model.type, model.path, model.position, model.rotation, model.scale, scene, model.material)))
+            .then(() => {
+                isOrbitingRef.current = true;
+                setIsSceneLoaded(true); // This is set once all models are loaded
+                console.log('All models loaded');
+            })
+            .catch(error => {
+                console.error('Error loading models:', error);
+      });
     ////////////////////////////
 
 
+    /////// LIGHTS CONFIG  ///////
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(5, 10, 7.5);
+    light.castShadow = true;
+    light.shadow.mapSize.width = 1024; // Default is 512
+    light.shadow.mapSize.height = 1024; 
+    scene.add(light);
+    ////////////////////////////
 
     /////// EQUIRECTANGULAR BACKGROUND ///////
-    const textureLoader = new THREE.TextureLoader();
-    textureLoader.load('background-scene.png', function(texture) {
-      const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
-      rt.fromEquirectangularTexture(renderer, texture);
-      scene.background = rt.texture;
-    });
+    // const textureLoader = new THREE.TextureLoader();
+    // textureLoader.load('background-scene.png', function(texture) {
+    //   const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+    //   rt.fromEquirectangularTexture(renderer, texture);
+    //   scene.background = rt.texture;
+    // });
     ////////////////////////////
 
     
@@ -83,26 +152,6 @@ const Portfolio: FC = memo(() => {
     window.addEventListener('resize', onWindowResize);
     
 
-
-    const loader = new THREE.ObjectLoader();
-    loader.load(
-      'scene.json', // The path to your exported scene file
-      function (object) {
-        scene.add(object);
-        //controls.target.copy(object.position);
-        //controls.update();
-        // Hide the loading screen once the scene is fully loaded
-        setTimeout(() => {
-          //setIsLoading(false); // Hide loader after loading is complete
-        }, 20000); 
-      },
-      function (xhr) {
-        console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-      },
-      function (error) {
-        console.log('An error happened', error);
-      }
-    );
     // Camera position
     camera.position.set(0, 0.2, 1);
 
@@ -173,17 +222,54 @@ const Portfolio: FC = memo(() => {
       renderer.render(scene, camera);
     };
     ////////////////////////////
-
     animateOrbitCamera();
+    return () => {
+      // Remove event listeners
+      window.removeEventListener('resize', onWindowResize);
+      if (currentRef) {
+        currentRef.removeEventListener('click', onClick);
+        currentRef.removeEventListener('click', onClickRaycast);
+        // If you appended the renderer's DOM element, remove it
+        currentRef.removeChild(renderer.domElement);
+      }
+  
+      // Stop the animation
+      // It's important to stop the requestAnimationFrame loop. For this, you can use a flag.
+      isOrbitingRef.current = false; // Assuming this stops your animation loop.
+  
+      // Dispose of Three.js objects here
+      // This is an example, adjust based on what objects you've created.
+      renderer.dispose();
+      //pmremGenerator.dispose();
+      // If you have other disposables (textures, geometries, materials), dispose of them here.
+      scene.traverse((object) => {
+        if ((object as THREE.Mesh).isMesh) {
+          const mesh = object as THREE.Mesh;
+          if (mesh.geometry) {
+            mesh.geometry.dispose();
+          }
+          if (Array.isArray(mesh.material)) {
+            mesh.material.forEach(material => material.dispose());
+          } else {
+            mesh.material.dispose();
+          }
+        }
+      });
+    };
   }, []);
 
   return (
     <div className='screen'>
-      <div className='crt loading-text'>
-        <h1>Loading...</h1>
-      </div>
+      {/* Conditional rendering of the loading indicator */}
+      {!isSceneLoaded || !isAnimationDone ? (
+        <div className='crt loading-text'>
+          <h1>Loading...</h1>
+        </div>
+      ) : null}
+  
+      {/* This div acts as the container for the Three.js scene and is always rendered in the DOM */}
+      <div className={`portfolio-container ${!isSceneLoaded || !isAnimationDone ? 'hidden' : ''}`} ref={mountRef}></div>
     </div>
   );
 });
-
 export default Portfolio;

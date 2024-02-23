@@ -218,6 +218,9 @@ th {
   pointer-events: none;
   animation: flicker 0.15s infinite;
 }
+.hidden {
+  display: none;
+}
 .crt::before {
   content: " ";
   display: block;
