@@ -11,7 +11,7 @@ export function loadModelAtPosition(
   rotation: THREE.Euler,
   scale: THREE.Vector3,
   scene: THREE.Scene,
-  materialParams: THREE.MeshStandardMaterialParameters = { color: 0x7561A5 }, // Default material color
+  materialParams: THREE.MeshStandardMaterialParameters = {color: 0x7561A5}, // Default material color
   customMaterial?: THREE.Material // Optional custom material parameter
 ): Promise<THREE.Object3D> {
   return new Promise((resolve, reject) => {

@@ -1,7 +1,7 @@
 import React, {FC, memo,useEffect, useRef, useState} from 'react';
 import * as THREE from 'three';
 
-import {loadModelAtPosition,animateCameraToPosition,ModelType} from '../utils/three-utils';
+import {animateCameraToPosition,loadModelAtPosition,ModelType} from '../utils/three-utils';
 
 //import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
@@ -150,13 +150,13 @@ const Portfolio: FC = memo(() => {
     `;
     const initialTexture = new THREE.TextureLoader().load('starfall-rebellion\\1.png');
     const uniforms = {
-      tDiffuse: { value: initialTexture }
+      tDiffuse: {value: initialTexture}
     };
     ////////////////////////////
 
   
     
-    const materialParams = { color: 0xbcbcbc, roughness: 0.1, metalness: 0 }
+    const materialParams = {color: 0xbcbcbc, roughness: 0.1, metalness: 0}
     const modelType: ModelType = 'gltf';
     const boxType: ModelType = 'box';
     const planeType: ModelType = 'plane';
