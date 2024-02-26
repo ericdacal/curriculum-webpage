@@ -113,7 +113,8 @@ const Portfolio: FC = memo(() => {
   
     const initialTexture = new THREE.TextureLoader().load('starfall-rebellion\\1.png');
     const uniforms = {
-      tDiffuse: {value: initialTexture}
+      tDiffuse: {value: initialTexture},
+      scanlineIntensity: { value: 1 }
     };
     ////////////////////////////
 
