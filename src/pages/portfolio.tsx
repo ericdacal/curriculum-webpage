@@ -103,6 +103,7 @@ const Portfolio: FC = memo(() => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.toneMapping = THREE.ReinhardToneMapping;
+    renderer.toneMappingExposure = 2.3
     renderer.shadowMap.enabled = true;
 
 
@@ -113,13 +114,13 @@ const Portfolio: FC = memo(() => {
   
     const initialTexture = new THREE.TextureLoader().load('starfall-rebellion\\1.png');
     const uniforms = {
-      tDiffuse: {value: initialTexture},
-      scanlineIntensity: { value: 1 }
+      texture: { value: initialTexture },
+      curvature: { value: new THREE.Vector2(3.0, 3.0) },
+      screenResolution: { value: 800.0 }, // Set according to your needs
+      scanLineOpacity: { value: 1.0 }
     };
     ////////////////////////////
 
-  
-    
     const materialParams = {color: 0xbcbcbc, roughness: 0.1, metalness: 0}
     const modelType: ModelType = 'gltf';
     const boxType: ModelType = 'box';
@@ -147,11 +148,14 @@ const Portfolio: FC = memo(() => {
 
 
     /////// LIGHTS CONFIG  ///////
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(5, 10, 7.5);
+    // const light = new THREE.DirectionalLight(0xffffff, 1);
+    // light.position.set(5, 10, 7.5);
+    // light.castShadow = true;
+    // light.shadow.mapSize.width = 1024; // Default is 512
+    // light.shadow.mapSize.height = 1024; 
+
+    const light = new THREE.HemisphereLight(0xffffff, 0xfffffff,4);
     light.castShadow = true;
-    light.shadow.mapSize.width = 1024; // Default is 512
-    light.shadow.mapSize.height = 1024; 
     scene.add(light);
     ////////////////////////////
 
