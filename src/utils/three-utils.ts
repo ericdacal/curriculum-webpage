@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
 
 export type ModelType = 'gltf' | 'box' | 'sphere' | 'cylinder' | 'plane';
 
@@ -82,7 +83,7 @@ function handleError(err: unknown, reject: (reason?: unknown) => void) {
     reject(err);
 }
 
-export function animateCameraToPosition(renderer: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, targetPosition: THREE.Vector3, targetEuler: THREE.Euler, lookAtPosition: THREE.Vector3, duration: number) {
+export function animateCameraToPosition(composer: EffectComposer,renderer: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, targetPosition: THREE.Vector3, targetEuler: THREE.Euler, lookAtPosition: THREE.Vector3, duration: number) {
   // Assume isOrbitingRef.current is available in your context for disabling orbiting
   
   const startTime = performance.now();
@@ -120,6 +121,7 @@ export function animateCameraToPosition(renderer: THREE.WebGLRenderer, scene: TH
 
     // Update the scene
     renderer.render(scene, camera);
+    composer.render();
   }
   
   animate();

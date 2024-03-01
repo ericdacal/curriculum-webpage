@@ -6,6 +6,11 @@ import {animateCameraToPosition,loadModelAtPosition,ModelType} from '../utils/th
 import crtVertShader from '../utils/shaders/crt-vert.glsl'
 import crtFragShader from '../utils/shaders/crt-frag.glsl'
 
+
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+
 //import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 const Portfolio: FC = memo(() => {
@@ -46,7 +51,7 @@ const Portfolio: FC = memo(() => {
     const mouse = new THREE.Vector2();
 
     const onClick = () => {
-      animateCameraToPosition(renderer, scene, camera, new THREE.Vector3(0, 0.47, 0.17), new THREE.Euler(0, 0, 0),new THREE.Vector3(0, 0, -1), 2000 )
+      animateCameraToPosition(composer,renderer, scene, camera, new THREE.Vector3(0, 0.47, 0.17), new THREE.Euler(0, 0, 0),new THREE.Vector3(0, 0, -1), 2000 )
       isOrbitingRef.current = false
       //animateCameraToFrontView();
       if (currentRef) {
@@ -62,8 +67,7 @@ const Portfolio: FC = memo(() => {
       camera.updateProjectionMatrix();
   
       renderer.setSize(width, height);
-      // If you're using a composer, uncomment the next line
-      // composer.setSize(width, height);
+      composer.setSize(width, height);
     }
 
     const onClickRaycast = (event: MouseEvent) => {
@@ -81,7 +85,7 @@ const Portfolio: FC = memo(() => {
         isArcadeMachineClicked = isArcadeMachineClicked || intersect.object.name === 'ArcadeMachine'
       }
       if (!isArcadeMachineClicked) {
-        animateCameraToPosition(renderer, scene, camera, new THREE.Vector3(0, 1, 1), new THREE.Euler(), new THREE.Vector3(0, 0, 0), 1000 )
+        animateCameraToPosition(composer,renderer, scene, camera, new THREE.Vector3(0, 1, 1), new THREE.Euler(), new THREE.Vector3(0, 0, 0), 1000 )
         isOrbitingRef.current = true;
         if (currentRef) {
           currentRef.addEventListener('click', onClick); 
@@ -105,7 +109,20 @@ const Portfolio: FC = memo(() => {
     renderer.toneMapping = THREE.ReinhardToneMapping;
     renderer.toneMappingExposure = 2.3
     renderer.shadowMap.enabled = true;
+    ////////////////////////////
 
+
+    /////// ADD EFFECTS ///////
+    const composer = new EffectComposer(renderer);
+    composer.setSize(window.innerWidth, window.innerHeight);
+
+    // Add RenderPass
+    const renderPass = new RenderPass(scene, camera);
+    composer.addPass(renderPass);
+
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85); // Adjust parameters as needed
+    composer.addPass(bloomPass);
+    ////////////////////////////
 
     // const pmremGenerator = new THREE.PMREMGenerator(renderer);
     // scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
@@ -154,7 +171,7 @@ const Portfolio: FC = memo(() => {
     // light.shadow.mapSize.width = 1024; // Default is 512
     // light.shadow.mapSize.height = 1024; 
 
-    const light = new THREE.HemisphereLight(0xffffff, 0xfffffff,4);
+    const light = new THREE.HemisphereLight(0xffffff, 0xfffffff,0.4);
     light.castShadow = true;
     scene.add(light);
     ////////////////////////////
@@ -239,8 +256,8 @@ const Portfolio: FC = memo(() => {
         camera.position.y = height;
         camera.lookAt(scene.position);
       }
-    
       renderer.render(scene, camera);
+      composer.render();
     };
     ////////////////////////////
     animateOrbitCamera();
@@ -276,6 +293,7 @@ const Portfolio: FC = memo(() => {
           }
         }
       });
+      composer.dispose();
     };
   }, []);
 
