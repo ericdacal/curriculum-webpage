@@ -50,9 +50,9 @@ export function loadModelAtPosition(
       console.log(customMaterial)
       // Use custom material if provided, otherwise create a new material
       const material = customMaterial ? customMaterial : new THREE.MeshStandardMaterial(materialParams);
-      console.log(type)
-      console.log(material)
       const mesh = new THREE.Mesh(geometry, material);
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
       setupModel(mesh, position, rotation, scale, scene);
       resolve(mesh);
     }

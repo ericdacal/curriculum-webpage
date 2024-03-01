@@ -11,7 +11,8 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 
-//import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+
+
 
 const Portfolio: FC = memo(() => {
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -129,7 +130,8 @@ const Portfolio: FC = memo(() => {
     // scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
     ////////////////////////////
 
-  
+    /////// ADD CREATE CUSTOM MATERIALS ///////
+    /////// CRT MATERIAL ///////
     const initialTexture = new THREE.TextureLoader().load('starfall-rebellion\\1.png');
     const uniforms = {
       tDiffuse: { value: initialTexture }, // This needs to be set or used accordingly
@@ -140,7 +142,46 @@ const Portfolio: FC = memo(() => {
       fragmentShader: crtFragShader,
       uniforms: uniforms
     });
+
+    /////// GROUND MATERIAL ///////
+    const repeatValueGround = 125
+    const groundBaseColor =  new THREE.TextureLoader().load('ground\\Ground_basecolor.png')
+    groundBaseColor.repeat.set(repeatValueGround,repeatValueGround)
+    groundBaseColor.wrapS = groundBaseColor.wrapT = THREE.RepeatWrapping;
+    const groundMetallicMap =  new THREE.TextureLoader().load('ground\\Ground_metallic.png')
+    groundMetallicMap.repeat.set(repeatValueGround,repeatValueGround)
+    groundMetallicMap.wrapS = groundMetallicMap.wrapT = THREE.RepeatWrapping;
+    const groundNormalMap =  new THREE.TextureLoader().load('ground\\Ground_normal.png')
+    groundNormalMap.repeat.set(repeatValueGround,repeatValueGround)
+    groundNormalMap.wrapS = groundNormalMap.wrapT = THREE.RepeatWrapping;
+    const groundMaterial = new THREE.MeshStandardMaterial({
+      map: groundBaseColor, // base color texture
+      metalnessMap: groundMetallicMap, // metallic texture
+      normalMap: groundNormalMap, // normal map texture
+    });
+
     ////////////////////////////
+
+    /////// Wall MATERIAL ///////
+    const repeatValueWall = 20
+    const wallBaseColor =  new THREE.TextureLoader().load('wall\\BarWall_basecolor.png')
+    wallBaseColor.repeat.set(repeatValueWall,2)
+    wallBaseColor.wrapS = wallBaseColor.wrapT = THREE.RepeatWrapping;
+    const wallMetallicMap =  new THREE.TextureLoader().load('wall\\BarWall_metallic.png')
+    wallMetallicMap.repeat.set(repeatValueWall,2)
+    wallMetallicMap.wrapS = wallMetallicMap.wrapT = THREE.RepeatWrapping;
+    const wallNormalMap =  new THREE.TextureLoader().load('wall\\BarWall_normal.png')
+    wallNormalMap.repeat.set(repeatValueWall,2)
+    wallNormalMap.wrapS = wallNormalMap.wrapT = THREE.RepeatWrapping;
+    const wallMaterial = new THREE.MeshStandardMaterial({
+      map: wallBaseColor, // base color texture
+      metalnessMap: wallMetallicMap, // metallic texture
+      normalMap: wallNormalMap, // normal map texture
+    });
+
+    ////////////////////////////
+    ////////////////////////////
+
 
     const materialParams = {color: 0xbcbcbc, roughness: 0.1, metalness: 0}
     const modelType: ModelType = 'gltf';
@@ -150,7 +191,8 @@ const Portfolio: FC = memo(() => {
     const modelsToLoad = [
       {type: modelType, path: "arcade_machine.glb", position: new THREE.Vector3(0,0,0), rotation: new THREE.Euler(0,(3*Math.PI)/2), scale: new THREE.Vector3(0.1,0.1,0.1), material: materialParams},
       {type: planeType, path: '', position: new THREE.Vector3(-0.02,0.4,0.04), rotation: new THREE.Euler(0,2*Math.PI,0), scale: new THREE.Vector3(0.2,0.17,1), customMaterial: crtMaterial},
-      {type: boxType, path: '', position: new THREE.Vector3(0, -0.1, 0), rotation: new THREE.Euler(Math.PI/2, 0, 0), scale: new THREE.Vector3(100, 100, 0.1), material: materialParams},
+      {type: boxType, path: '', position: new THREE.Vector3(0, -0.1, 0), rotation: new THREE.Euler(Math.PI/2, 0, 0), scale: new THREE.Vector3(100, 100, 0.1), material: groundMaterial},
+      {type: boxType, path: '', position: new THREE.Vector3(0, 0.5, -0.7), rotation: new THREE.Euler(Math.PI/2, 0, 0), scale: new THREE.Vector3(15, 1, 1), material: wallMaterial},
     ];
     Promise.all(modelsToLoad.map(model => loadModelAtPosition(model.type, model.path, model.position, model.rotation, model.scale, scene, model.material, model.customMaterial)))
             .then(() => {
