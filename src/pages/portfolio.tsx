@@ -68,6 +68,7 @@ const Portfolio: FC = memo(() => {
   
       renderer.setSize(width, height);
       composer.setSize(width, height);
+      crtMaterial.uniforms.iResolution.value.set(window.innerWidth, window.innerHeight);
     }
 
     const onClickRaycast = (event: MouseEvent) => {
@@ -131,11 +132,14 @@ const Portfolio: FC = memo(() => {
   
     const initialTexture = new THREE.TextureLoader().load('starfall-rebellion\\1.png');
     const uniforms = {
-      texture: { value: initialTexture },
-      curvature: { value: new THREE.Vector2(3.0, 3.0) },
-      screenResolution: { value: 800.0 }, // Set according to your needs
-      scanLineOpacity: { value: 1.0 }
+      tDiffuse: { value: initialTexture }, // This needs to be set or used accordingly
+      iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
     };
+    const crtMaterial = new THREE.ShaderMaterial({
+      vertexShader: crtVertShader,
+      fragmentShader: crtFragShader,
+      uniforms: uniforms
+    });
     ////////////////////////////
 
     const materialParams = {color: 0xbcbcbc, roughness: 0.1, metalness: 0}
@@ -145,11 +149,7 @@ const Portfolio: FC = memo(() => {
     /////// MODELS LOAD  ///////
     const modelsToLoad = [
       {type: modelType, path: "arcade_machine.glb", position: new THREE.Vector3(0,0,0), rotation: new THREE.Euler(0,(3*Math.PI)/2), scale: new THREE.Vector3(0.1,0.1,0.1), material: materialParams},
-      {type: planeType, path: '', position: new THREE.Vector3(-0.02,0.4,0.04), rotation: new THREE.Euler(0,2*Math.PI,0), scale: new THREE.Vector3(0.2,0.17,1), customMaterial: new THREE.ShaderMaterial({
-        vertexShader: crtVertShader,
-        fragmentShader: crtFragShader,
-        uniforms: uniforms
-      })},
+      {type: planeType, path: '', position: new THREE.Vector3(-0.02,0.4,0.04), rotation: new THREE.Euler(0,2*Math.PI,0), scale: new THREE.Vector3(0.2,0.17,1), customMaterial: crtMaterial},
       {type: boxType, path: '', position: new THREE.Vector3(0, -0.1, 0), rotation: new THREE.Euler(Math.PI/2, 0, 0), scale: new THREE.Vector3(100, 100, 0.1), material: materialParams},
     ];
     Promise.all(modelsToLoad.map(model => loadModelAtPosition(model.type, model.path, model.position, model.rotation, model.scale, scene, model.material, model.customMaterial)))
