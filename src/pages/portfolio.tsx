@@ -20,6 +20,8 @@ const Portfolio: FC = memo(() => {
   const [isAnimationDone, setIsAnimationDone] = useState(false);
   const isOrbitingRef = useRef(true);
 
+  const roofVentRef = useRef<THREE.Object3D | null>(null);
+
   // /////// HTML HANDLERS ///////
   //  // Handler for the left arrow click
   // const handleLeftArrowClick = () => {
@@ -154,16 +156,17 @@ const Portfolio: FC = memo(() => {
     const groundNormalMap =  new THREE.TextureLoader().load('ground\\Ground_normal.png')
     groundNormalMap.repeat.set(repeatValueGround,repeatValueGround)
     groundNormalMap.wrapS = groundNormalMap.wrapT = THREE.RepeatWrapping;
-    const groundMaterial = new THREE.MeshStandardMaterial({
+    const groundMaterial = {
       map: groundBaseColor, // base color texture
       metalnessMap: groundMetallicMap, // metallic texture
       normalMap: groundNormalMap, // normal map texture
-    });
+      receiveShadow: true
+    }
 
     ////////////////////////////
 
     /////// Wall MATERIAL ///////
-    const repeatValueWall = 20
+    const repeatValueWall = 40
     const wallBaseColor =  new THREE.TextureLoader().load('wall\\BarWall_basecolor.png')
     wallBaseColor.repeat.set(repeatValueWall,2)
     wallBaseColor.wrapS = wallBaseColor.wrapT = THREE.RepeatWrapping;
@@ -173,12 +176,17 @@ const Portfolio: FC = memo(() => {
     const wallNormalMap =  new THREE.TextureLoader().load('wall\\BarWall_normal.png')
     wallNormalMap.repeat.set(repeatValueWall,2)
     wallNormalMap.wrapS = wallNormalMap.wrapT = THREE.RepeatWrapping;
-    const wallMaterial = new THREE.MeshStandardMaterial({
+    const wallMaterial = {
       map: wallBaseColor, // base color texture
       metalnessMap: wallMetallicMap, // metallic texture
       normalMap: wallNormalMap, // normal map texture
-    });
-
+      receiveShadow: true
+    }
+    const emissionMaterialParams = {
+      color: 0x00ff00, // Base color of the material
+      emissive: 0xff0000, // Emissive color (red in this case)
+      emissiveIntensity: 2.5, // Intensity of the emissive effect
+    }
     ////////////////////////////
     ////////////////////////////
 
@@ -187,35 +195,61 @@ const Portfolio: FC = memo(() => {
     const modelType: ModelType = 'gltf';
     const boxType: ModelType = 'box';
     const planeType: ModelType = 'plane';
+    const cylinderType: ModelType = 'cylinder';
+    
     /////// MODELS LOAD  ///////
     const modelsToLoad = [
-      {type: modelType, path: "arcade_machine.glb", position: new THREE.Vector3(0,0,0), rotation: new THREE.Euler(0,(3*Math.PI)/2), scale: new THREE.Vector3(0.1,0.1,0.1), material: materialParams},
-      {type: planeType, path: '', position: new THREE.Vector3(-0.02,0.4,0.04), rotation: new THREE.Euler(0,2*Math.PI,0), scale: new THREE.Vector3(0.2,0.17,1), customMaterial: crtMaterial},
-      {type: boxType, path: '', position: new THREE.Vector3(0, -0.1, 0), rotation: new THREE.Euler(Math.PI/2, 0, 0), scale: new THREE.Vector3(100, 100, 0.1), material: groundMaterial},
-      {type: boxType, path: '', position: new THREE.Vector3(0, 0.5, -0.7), rotation: new THREE.Euler(Math.PI/2, 0, 0), scale: new THREE.Vector3(15, 1, 1), material: wallMaterial},
+      {type: modelType, path: "arcade_machine.glb", position: new THREE.Vector3(0,0,-0.1), rotation: new THREE.Euler(0,(3*Math.PI)/2), scale: new THREE.Vector3(0.1,0.1,0.1), material: materialParams, customMaterial:undefined},
+      {type: planeType, path: '', position: new THREE.Vector3(-0.02,0.4,-0.04), rotation: new THREE.Euler(0,2*Math.PI,0), scale: new THREE.Vector3(0.2,0.17,1), material: materialParams, customMaterial: crtMaterial},
+      {type: boxType, path: '', position: new THREE.Vector3(0, -0.1, 0), rotation: new THREE.Euler(Math.PI/2, 0, 0), scale: new THREE.Vector3(100, 100, 0.1), material: groundMaterial, customMaterial:undefined},
+      {type: boxType, path: '', position: new THREE.Vector3(0, 0.5, -0.7), rotation: new THREE.Euler(0, 0, 0), scale: new THREE.Vector3(15, 1, 1), material: wallMaterial, customMaterial:undefined},
+      {type: boxType, path: '', position: new THREE.Vector3(-1.5, 0.5, -0.7), rotation: new THREE.Euler(0, Math.PI/2, 0), scale: new THREE.Vector3(15, 1, 1), material: wallMaterial, customMaterial:undefined},
+      {type: cylinderType, path: '', position: new THREE.Vector3(0, 0, -0.183), rotation: new THREE.Euler(0, 0,  Math.PI/2), scale: new THREE.Vector3(0.02, 10, 0.02), material: emissionMaterialParams, customMaterial:undefined},
+      {type: cylinderType, path: '', position: new THREE.Vector3(-1, 0, -0.183), rotation: new THREE.Euler(0, Math.PI/2,  Math.PI/2), scale: new THREE.Vector3(0.02, 10, 0.02), material: emissionMaterialParams, customMaterial:undefined},
+      {type: modelType, path: "sign\\neon_sign.glb", position: new THREE.Vector3(0,0.6,-0.2), rotation: new THREE.Euler(Math.PI/2, 0, 0), scale: new THREE.Vector3(0.2,0.2,0.2), material: emissionMaterialParams, customMaterial:new THREE.MeshStandardMaterial(emissionMaterialParams)},
+      {type: modelType, path: "roof-vent\\roof_vent.glb", position: new THREE.Vector3(0,0.8,1.15), rotation: new THREE.Euler(0,0,0), scale: new THREE.Vector3(0.1,0.1,0.1), material: materialParams, customMaterial:undefined},
+      {type: modelType, path: "stool\\stool.glb", position: new THREE.Vector3(0.5,0.19,0), rotation: new THREE.Euler(0,0,0), scale: new THREE.Vector3(0.05,0.05,0.05), material: materialParams, customMaterial:undefined},
+      {type: modelType, path: "table\\table.glb", position: new THREE.Vector3(0.65,0.16,0), rotation: new THREE.Euler(0,0,0), scale: new THREE.Vector3(0.06,0.06,0.06), material: materialParams, customMaterial:undefined}
     ];
-    Promise.all(modelsToLoad.map(model => loadModelAtPosition(model.type, model.path, model.position, model.rotation, model.scale, scene, model.material, model.customMaterial)))
-            .then(() => {
-                isOrbitingRef.current = true;
-                setIsSceneLoaded(true); // This is set once all models are loaded
-                console.log('All models loaded');
-            })
-            .catch(error => {
-                console.error('Error loading models:', error);
-      });
+    Promise.all(modelsToLoad.map(model => {
+      return loadModelAtPosition(model.type, model.path, model.position, model.rotation, model.scale, scene, model.material, model.customMaterial)
+        .then(loadedModel => {
+          // Here, you check if the loaded model is the roof vent and set the ref accordingly
+          if (model.path.includes("roof-vent")) {
+            roofVentRef.current = loadedModel;
+          }
+          return loadedModel; // Return the loaded model for consistency
+        });
+    }))
+    .then(() => {
+        isOrbitingRef.current = true;
+        setIsSceneLoaded(true); // This is set once all models are loaded
+        console.log('All models loaded');
+    })
+    .catch(error => {
+        console.error('Error loading models:', error);
+    });
+    
     ////////////////////////////
 
 
     /////// LIGHTS CONFIG  ///////
-    // const light = new THREE.DirectionalLight(0xffffff, 1);
-    // light.position.set(5, 10, 7.5);
-    // light.castShadow = true;
-    // light.shadow.mapSize.width = 1024; // Default is 512
-    // light.shadow.mapSize.height = 1024; 
-
-    const light = new THREE.HemisphereLight(0xffffff, 0xfffffff,0.4);
+    const light = new THREE.DirectionalLight(0xffffff, 0.8);
+    light.position.set(0, 10, 6);
     light.castShadow = true;
+    light.shadow.mapSize.width = 2048; // Default is 512
+    light.shadow.mapSize.height = 2048;
+    light.shadow.camera.left = -5;
+    light.shadow.camera.right = 5;
+    light.shadow.camera.top = 5;
+    light.shadow.camera.bottom = -5;
+    light.shadow.camera.near = 0.5;
+    light.shadow.camera.far = 500;
     scene.add(light);
+
+    // const light = new THREE.HemisphereLight(0xffffff, 0xfffffff,0.4);
+    // light.castShadow = true;
+    // scene.add(light);
     ////////////////////////////
 
     /////// EQUIRECTANGULAR BACKGROUND ///////
@@ -276,6 +310,7 @@ const Portfolio: FC = memo(() => {
     let angle = 0; // Initial angle
     let angleIncrement = 0.001; // Speed of the orbit
 
+
     const animateOrbitCamera = function () {
       requestAnimationFrame(animateOrbitCamera);
       const radius = 1; // Example value, adjust as needed
@@ -297,6 +332,9 @@ const Portfolio: FC = memo(() => {
         camera.position.z = radius * Math.cos(angle);
         camera.position.y = height;
         camera.lookAt(scene.position);
+      }
+      if (roofVentRef.current) {
+        roofVentRef.current.rotation.y += 0.01; // Adjust rotation speed as needed
       }
       renderer.render(scene, camera);
       composer.render();

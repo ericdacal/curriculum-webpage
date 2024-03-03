@@ -12,8 +12,8 @@ export function loadModelAtPosition(
   rotation: THREE.Euler,
   scale: THREE.Vector3,
   scene: THREE.Scene,
-  materialParams: THREE.MeshStandardMaterialParameters = {color: 0x7561A5}, // Default material color
-  customMaterial?: THREE.Material // Optional custom material parameter
+  materialParams: THREE.MeshStandardMaterialParameters,
+  customMaterial?: THREE.Material
 ): Promise<THREE.Object3D> {
   return new Promise((resolve, reject) => {
     if (type === 'gltf') {
@@ -22,6 +22,14 @@ export function loadModelAtPosition(
         pathOrGeometry as string,
         (gltf) => {
           const model: THREE.Object3D = gltf.scene;
+          // If customMaterial is provided, apply it to all meshes in the model
+          if (customMaterial) {
+            model.traverse((node) => {
+              if ((node as THREE.Mesh).isMesh) {
+                (node as THREE.Mesh).material = customMaterial;
+              }
+            });
+          }
           setupModel(model, position, rotation, scale, scene);
           resolve(model);
         },
@@ -29,6 +37,7 @@ export function loadModelAtPosition(
         (error) => handleError(error, reject)
       );
     } else {
+      // The rest of your function remains unchanged
       let geometry: THREE.BufferGeometry;
       switch (type) {
         case 'box':
@@ -41,14 +50,12 @@ export function loadModelAtPosition(
           geometry = new THREE.CylinderGeometry(0.5, 0.5, 1, 32);
           break;
         case 'plane':
-          geometry = new THREE.PlaneGeometry(1, 1); // Create a plane geometry
+          geometry = new THREE.PlaneGeometry(1, 1);
           break;
         default:
           reject(new Error('Unsupported geometry type'));
           return;
       }
-      console.log(customMaterial)
-      // Use custom material if provided, otherwise create a new material
       const material = customMaterial ? customMaterial : new THREE.MeshStandardMaterial(materialParams);
       const mesh = new THREE.Mesh(geometry, material);
       mesh.castShadow = true;
