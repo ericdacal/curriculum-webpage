@@ -1,15 +1,12 @@
 import React, {FC, memo,useEffect, useRef, useState} from 'react';
 import * as THREE from 'three';
+import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer';
+import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass';
+import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 
-import {animateCameraToPosition,loadModelAtPosition,ModelType} from '../utils/three-utils';
-
-import crtVertShader from '../utils/shaders/crt-vert.glsl'
 import crtFragShader from '../utils/shaders/crt-frag.glsl'
-
-
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import crtVertShader from '../utils/shaders/crt-vert.glsl'
+import {animateCameraToPosition,loadModelAtPosition,ModelType} from '../utils/three-utils';
 
 
 
@@ -136,8 +133,8 @@ const Portfolio: FC = memo(() => {
     /////// CRT MATERIAL ///////
     const initialTexture = new THREE.TextureLoader().load('starfall-rebellion\\1.png');
     const uniforms = {
-      tDiffuse: { value: initialTexture }, // This needs to be set or used accordingly
-      iResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
+      tDiffuse: {value: initialTexture}, // This needs to be set or used accordingly
+      iResolution: {value: new THREE.Vector2(window.innerWidth, window.innerHeight)}
     };
     const crtMaterial = new THREE.ShaderMaterial({
       vertexShader: crtVertShader,

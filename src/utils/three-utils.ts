@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer';
 
 export type ModelType = 'gltf' | 'box' | 'sphere' | 'cylinder' | 'plane';
 
