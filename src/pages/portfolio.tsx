@@ -108,7 +108,8 @@ const Portfolio: FC = memo(() => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.toneMapping = THREE.ReinhardToneMapping;
-    renderer.toneMappingExposure = 2.3
+    renderer.toneMappingExposure = 2.3;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.shadowMap.enabled = true;
     ////////////////////////////
 
@@ -188,16 +189,17 @@ const Portfolio: FC = memo(() => {
     ////////////////////////////
 
 
-    const materialParams = {color: 0xbcbcbc, roughness: 0.1, metalness: 0}
+    //const materialParams = {color: 0xbcbcbc, roughness: 0.1, metalness: 0}
+    const materialParams = {color: 0xffffff}
     const modelType: ModelType = 'gltf';
     const boxType: ModelType = 'box';
-    const planeType: ModelType = 'plane';
+    //const planeType: ModelType = 'plane';
     const cylinderType: ModelType = 'cylinder';
     
     /////// MODELS LOAD  ///////
     const modelsToLoad = [
-      {type: modelType, path: "arcade_machine.glb", position: new THREE.Vector3(0,0,-0.1), rotation: new THREE.Euler(0,(3*Math.PI)/2), scale: new THREE.Vector3(0.1,0.1,0.1), material: materialParams, customMaterial:undefined},
-      {type: planeType, path: '', position: new THREE.Vector3(-0.02,0.4,-0.04), rotation: new THREE.Euler(0,2*Math.PI,0), scale: new THREE.Vector3(0.2,0.17,1), material: materialParams, customMaterial: crtMaterial},
+      {type: modelType, path: "arcade_machine.glb", position: new THREE.Vector3(0,0,-0.0), rotation: new THREE.Euler(0,(3*Math.PI)/2), scale: new THREE.Vector3(0.1,0.1,0.1), material: materialParams, customMaterial:undefined},
+      //{type: planeType, path: '', position: new THREE.Vector3(-0.02,0.4,0.05), rotation: new THREE.Euler(0,2*Math.PI,0), scale: new THREE.Vector3(0.2,0.17,1), material: materialParams, customMaterial: crtMaterial},
       {type: boxType, path: '', position: new THREE.Vector3(0, -0.1, 0), rotation: new THREE.Euler(Math.PI/2, 0, 0), scale: new THREE.Vector3(100, 100, 0.1), material: groundMaterial, customMaterial:undefined},
       {type: boxType, path: '', position: new THREE.Vector3(0, 0.5, -0.7), rotation: new THREE.Euler(0, 0, 0), scale: new THREE.Vector3(15, 1, 1), material: wallMaterial, customMaterial:undefined},
       {type: boxType, path: '', position: new THREE.Vector3(-1.5, 0.5, -0.7), rotation: new THREE.Euler(0, Math.PI/2, 0), scale: new THREE.Vector3(15, 1, 1), material: wallMaterial, customMaterial:undefined},
@@ -205,8 +207,11 @@ const Portfolio: FC = memo(() => {
       {type: cylinderType, path: '', position: new THREE.Vector3(-1, 0, -0.183), rotation: new THREE.Euler(0, Math.PI/2,  Math.PI/2), scale: new THREE.Vector3(0.02, 10, 0.02), material: emissionMaterialParams, customMaterial:undefined},
       {type: modelType, path: "sign\\neon_sign.glb", position: new THREE.Vector3(0,0.6,-0.2), rotation: new THREE.Euler(Math.PI/2, 0, 0), scale: new THREE.Vector3(0.2,0.2,0.2), material: emissionMaterialParams, customMaterial:new THREE.MeshStandardMaterial(emissionMaterialParams)},
       {type: modelType, path: "roof-vent\\roof_vent.glb", position: new THREE.Vector3(0,0.8,1.15), rotation: new THREE.Euler(0,0,0), scale: new THREE.Vector3(0.1,0.1,0.1), material: materialParams, customMaterial:undefined},
-      {type: modelType, path: "stool\\stool.glb", position: new THREE.Vector3(0.5,0.19,0), rotation: new THREE.Euler(0,0,0), scale: new THREE.Vector3(0.05,0.05,0.05), material: materialParams, customMaterial:undefined},
-      {type: modelType, path: "table\\table.glb", position: new THREE.Vector3(0.65,0.16,0), rotation: new THREE.Euler(0,0,0), scale: new THREE.Vector3(0.06,0.06,0.06), material: materialParams, customMaterial:undefined}
+      {type: modelType, path: "stool\\stool.glb", position: new THREE.Vector3(0.5,0.1,0), rotation: new THREE.Euler(0,0,0), scale: new THREE.Vector3(0.035,0.035,0.035), material: materialParams, customMaterial:undefined},
+      {type: modelType, path: "table\\table.glb", position: new THREE.Vector3(0.69,0.0,0), rotation: new THREE.Euler(0,0,0), scale: new THREE.Vector3(0.07,0.07,0.07), material: materialParams, customMaterial:undefined},
+      {type: modelType, path: "pub\\pub.glb", position: new THREE.Vector3(0.895,0.05,0), rotation: new THREE.Euler(0,0,0), scale: new THREE.Vector3(0.07,0.07,0.07), material: materialParams, customMaterial:undefined},
+      {type: modelType, path: "stool\\stool.glb", position: new THREE.Vector3(0.1,0.1,0.6), rotation: new THREE.Euler(0,0,0), scale: new THREE.Vector3(0.035,0.035,0.035), material: materialParams, customMaterial:undefined},
+      {type: modelType, path: "table\\table.glb", position: new THREE.Vector3(0.29,0.0,0.6), rotation: new THREE.Euler(0,0,0), scale: new THREE.Vector3(0.07,0.07,0.07), material: materialParams, customMaterial:undefined}
     ];
     Promise.all(modelsToLoad.map(model => {
       return loadModelAtPosition(model.type, model.path, model.position, model.rotation, model.scale, scene, model.material, model.customMaterial)
@@ -231,22 +236,34 @@ const Portfolio: FC = memo(() => {
 
 
     /////// LIGHTS CONFIG  ///////
-    const light = new THREE.DirectionalLight(0xffffff, 0.8);
-    light.position.set(0, 10, 6);
-    light.castShadow = true;
-    light.shadow.mapSize.width = 2048; // Default is 512
-    light.shadow.mapSize.height = 2048;
-    light.shadow.camera.left = -5;
-    light.shadow.camera.right = 5;
-    light.shadow.camera.top = 5;
-    light.shadow.camera.bottom = -5;
-    light.shadow.camera.near = 0.5;
-    light.shadow.camera.far = 500;
-    scene.add(light);
+    // const light = new THREE.DirectionalLight(0xffffff, 0.4);
+    // light.position.set(0, 9, 6);
+    // light.castShadow = true;
+    // light.shadow.mapSize.width = 1024; // Default is 512
+    // light.shadow.mapSize.height = 1024;
+    // // light.shadow.camera.left = -5;
+    // // light.shadow.camera.right = 5;
+    // // light.shadow.camera.top = 5;
+    // // light.shadow.camera.bottom = -5;
+    // // light.shadow.camera.near = 0.5;
+    // // light.shadow.camera.far = 500;
+    // scene.add(light);
 
     // const light = new THREE.HemisphereLight(0xffffff, 0xfffffff,0.4);
     // light.castShadow = true;
     // scene.add(light);
+
+
+
+    const pointLight = new THREE.PointLight(0xffffff, 1, 0, 3);
+    pointLight.position.set(-0.1, 1.3, 1.9);
+    pointLight.castShadow = true;
+    pointLight.shadow.camera.far = 500;
+    pointLight.shadow.mapSize.width = 1024; // Default is 512
+    pointLight.shadow.mapSize.height = 1024;
+    pointLight.shadow.bias = -0.0001;
+    scene.add(pointLight);
+
     ////////////////////////////
 
     /////// EQUIRECTANGULAR BACKGROUND ///////
@@ -312,8 +329,8 @@ const Portfolio: FC = memo(() => {
       requestAnimationFrame(animateOrbitCamera);
       const radius = 1; // Example value, adjust as needed
       const height = 1; // Height from the base, creates a diagonal angle
-      const minAngle = 0; // Minimum angle, could be 0 or any other value
-      const maxAngle = Math.PI/2; // Maximum angle, half orbit, adjust as needed
+      const minAngle = -(Math.PI/6);
+      const maxAngle = Math.PI/3;
   
     
       if (isOrbitingRef.current) {
