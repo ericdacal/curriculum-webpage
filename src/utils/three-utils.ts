@@ -90,7 +90,7 @@ function handleError(err: unknown, reject: (reason?: unknown) => void) {
     reject(err);
 }
 
-export function animateCameraToPosition(composer: EffectComposer,renderer: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, targetPosition: THREE.Vector3, targetEuler: THREE.Euler, lookAtPosition: THREE.Vector3, duration: number) {
+export function animateCameraToPosition(composer: EffectComposer,renderer: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, targetPosition: THREE.Vector3, targetEuler: THREE.Euler, lookAtPosition: THREE.Vector3, duration: number, updateCss: () => void) {
   // Assume isOrbitingRef.current is available in your context for disabling orbiting
   
   const startTime = performance.now();
@@ -129,6 +129,7 @@ export function animateCameraToPosition(composer: EffectComposer,renderer: THREE
     // Update the scene
     renderer.render(scene, camera);
     composer.render();
+    updateCss();
   }
   
   animate();

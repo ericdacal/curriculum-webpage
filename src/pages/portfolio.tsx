@@ -7,6 +7,7 @@ import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass
 import crtFragShader from '../utils/shaders/crt-frag.glsl'
 import crtVertShader from '../utils/shaders/crt-vert.glsl'
 import {animateCameraToPosition,loadModelAtPosition,ModelType} from '../utils/three-utils';
+import { setupCssRenderer } from '../utils/cssRenderer/CssRenderer';
 
 
 
@@ -18,7 +19,6 @@ const Portfolio: FC = memo(() => {
   const isOrbitingRef = useRef(true);
 
   const roofVentRef = useRef<THREE.Object3D | null>(null);
-
   // /////// HTML HANDLERS ///////
   //  // Handler for the left arrow click
   // const handleLeftArrowClick = () => {
@@ -51,7 +51,7 @@ const Portfolio: FC = memo(() => {
     const mouse = new THREE.Vector2();
 
     const onClick = () => {
-      animateCameraToPosition(composer,renderer, scene, camera, new THREE.Vector3(0, 0.47, 0.17), new THREE.Euler(0, 0, 0),new THREE.Vector3(0, 0, -1), 2000 )
+      animateCameraToPosition(composer,renderer, scene, camera, new THREE.Vector3(0, 0.47, 0.17), new THREE.Euler(0, 0, 0),new THREE.Vector3(0, 0, -1), 2000, updateCss)
       isOrbitingRef.current = false
       //animateCameraToFrontView();
       if (currentRef) {
@@ -86,7 +86,7 @@ const Portfolio: FC = memo(() => {
         isArcadeMachineClicked = isArcadeMachineClicked || intersect.object.name === 'ArcadeMachine'
       }
       if (!isArcadeMachineClicked) {
-        animateCameraToPosition(composer,renderer, scene, camera, new THREE.Vector3(0, 1, 1), new THREE.Euler(), new THREE.Vector3(0, 0, 0), 1000 )
+        animateCameraToPosition(composer,renderer, scene, camera, new THREE.Vector3(0, 1, 1), new THREE.Euler(), new THREE.Vector3(0, 0, 0), 1000, updateCss)
         isOrbitingRef.current = true;
         if (currentRef) {
           currentRef.addEventListener('click', onClick); 
@@ -126,8 +126,14 @@ const Portfolio: FC = memo(() => {
     composer.addPass(bloomPass);
     ////////////////////////////
 
-    // const pmremGenerator = new THREE.PMREMGenerator(renderer);
-    // scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+
+    /////// SETUP CSS3DRenderer /////
+    if (mountRef.current === null) {
+      console.error('Mount ref is null.');
+      return;
+    }
+    
+    const { updateCss, disposeCss } = setupCssRenderer(scene, camera, mountRef.current, 'https://eric-dacal.vercel.app/', '480x', '640px');
     ////////////////////////////
 
     /////// ADD CREATE CUSTOM MATERIALS ///////
@@ -352,6 +358,7 @@ const Portfolio: FC = memo(() => {
       }
       renderer.render(scene, camera);
       composer.render();
+      updateCss();
     };
     ////////////////////////////
     animateOrbitCamera();
@@ -388,6 +395,7 @@ const Portfolio: FC = memo(() => {
         }
       });
       composer.dispose();
+      disposeCss();
     };
   }, []);
 
