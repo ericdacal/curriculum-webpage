@@ -4,8 +4,7 @@ import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer';
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass';
 import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass';
 
-import crtFragShader from '../utils/shaders/crt-frag.glsl'
-import crtVertShader from '../utils/shaders/crt-vert.glsl'
+
 import {animateCameraToPosition,loadModelAtPosition,ModelType} from '../utils/three-utils';
 import { setupCssRenderer } from '../utils/cssRenderer/CssRenderer';
 
@@ -68,7 +67,6 @@ const Portfolio: FC = memo(() => {
   
       renderer.setSize(width, height);
       composer.setSize(width, height);
-      crtMaterial.uniforms.iResolution.value.set(window.innerWidth, window.innerHeight);
     }
 
     const onClickRaycast = (event: MouseEvent) => {
@@ -137,18 +135,6 @@ const Portfolio: FC = memo(() => {
     ////////////////////////////
 
     /////// ADD CREATE CUSTOM MATERIALS ///////
-    /////// CRT MATERIAL ///////
-    const initialTexture = new THREE.TextureLoader().load('starfall-rebellion\\1.png');
-    const uniforms = {
-      tDiffuse: {value: initialTexture}, // This needs to be set or used accordingly
-      iResolution: {value: new THREE.Vector2(window.innerWidth, window.innerHeight)}
-    };
-    const crtMaterial = new THREE.ShaderMaterial({
-      vertexShader: crtVertShader,
-      fragmentShader: crtFragShader,
-      uniforms: uniforms
-    });
-
     /////// GROUND MATERIAL ///////
     const repeatValueGround = 125
     const groundBaseColor =  new THREE.TextureLoader().load('ground\\Ground_basecolor.png')
