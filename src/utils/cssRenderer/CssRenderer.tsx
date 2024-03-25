@@ -24,6 +24,7 @@ export const setupCssRenderer = (scene: Scene, camera: Camera, container: HTMLDi
     cssRenderer.domElement.style.position = 'absolute';
     cssRenderer.domElement.style.top = '0';
     container.appendChild(cssRenderer.domElement);
+    container.style.position = 'relative';
 
     // Function to update the CSS3DRenderer on window resize
     const onWindowResize = () => {
