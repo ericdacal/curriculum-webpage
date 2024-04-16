@@ -6,6 +6,13 @@ const Starfall: FC = memo(() => {
       <div className='crt-starfall'>
           <Carousel>
             <Carousel.Item>
+              <img src='slides/starfall/slide0.webp' alt='Presentation slide'></img>
+              <Carousel.Caption>
+                <h1>Starfall Rebellion</h1>
+                <p>Master's Degree Project, where we develop a Lego Star Wars game</p>
+              </Carousel.Caption>
+            </Carousel.Item>
+            <Carousel.Item>
               <img src='slides/starfall/slide1.webp' alt='First slide'></img>
               <Carousel.Caption>
                 <h1>Art Director and Programmer</h1>

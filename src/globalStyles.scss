@@ -288,6 +288,34 @@ th {
 }
 
 
+.carousel {
+  display: flex;
+  overflow: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+
+.carousel-item {
+  flex: 0 0 auto;
+  margin-left: 40px;
+  scroll-snap-align: start;
+  width: 90%;
+}
+
+
+@media (min-width: 600px) {
+  .carousel-item {
+    width: 90%;
+  }
+}
+
+@media (min-width: 900px) {
+  .carousel-item {
+    width: 90%;
+  }
+}
+
+
 .carousel-caption {
   text-align: center;
 }
