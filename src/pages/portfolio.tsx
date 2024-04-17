@@ -131,7 +131,7 @@ const Portfolio: FC = memo(() => {
       return;
     }
     
-    const { updateCss, disposeCss } = setupCssRenderer(scene, camera, mountRef.current, 'https://eric-dacal.vercel.app/', '480x', '640px');
+    const { updateCss, disposeCss } = setupCssRenderer(scene, camera, mountRef.current, 'http://localhost:3000/starfall');
     ////////////////////////////
 
     /////// ADD CREATE CUSTOM MATERIALS ///////

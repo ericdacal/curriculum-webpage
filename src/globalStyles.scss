@@ -1,7 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.cdnfonts.com/css/sf-distant-galaxy');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 
 @layer utilities {
   /* Chrome, Safari and Opera */
@@ -245,6 +247,33 @@ th {
   50% { border-color: orange; }
 }
 
+.arrow {
+  color:#FC19FC;
+  position: fixed;
+  top: 50%; /* Centra las flechas verticalmente */
+  transform: translateY(-50%);
+  font-size: 8vh; /* Tamaño de las flechas */
+  cursor: pointer; /* Cambia el cursor para indicar que es clickeable */
+  z-index: 100; /* Asegura que las flechas estén por encima de otros elementos */
+  font-family: 'SF Distant Galaxy Outline', sans-serif;
+}
+
+.left-arrow {
+  left: 0;
+}
+
+.right-arrow {
+  right: 0;
+}
+
+.starfall-text{
+  margin: 10%;
+  margin-top: 15%;
+  font-size: 7vh;
+  font-family: 'SF Distant Galaxy Outline', sans-serif;
+  color: #FC19FC
+}
+
 .crt {
   animation: textShadow 1.6s infinite;
   color: #00ff00;
@@ -265,6 +294,15 @@ th {
   border-image-slice: 30 fill;
   border-image-outset: 0;
   border-image-width: 55px; /* You might need to adjust this */
+}
+
+.screen-inside {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* This makes the body fill the entire viewport height */
+  margin: 0; /* Removes default margin */
+  text-align: center; /* Centers text horizontally */
 }
 
 @keyframes typing {
