@@ -28,19 +28,9 @@ export const setupCssRenderer = (scene: Scene, camera: Camera, container: HTMLDi
 
     // Function to update the CSS3DRenderer on window resize
     const onWindowResize = () => {
-        // cssRenderer.setSize(container.offsetWidth, container.offsetHeight);
-
-        // // Update iframe scale to maintain aspect ratio
-        // const aspectRatio = iframeElement.offsetWidth / iframeElement.offsetHeight;
-        // const newWidth = container.offsetWidth;
-        // const newHeight = newWidth / aspectRatio;
-        // iframeElement.style.width = `${newWidth}px`;
-        // iframeElement.style.height = `${newHeight}px`;
-
-        // // Adjust CSS3DObject scale accordingly
-        // const scaleX = newWidth / parseFloat(width);
-        // const scaleY = newHeight / parseFloat(height);
-        // cssObject.scale.set(scaleX, scaleY, cssObject.scale.z); // Preserve original z scale
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        cssRenderer.setSize(width, height);
     };
     window.addEventListener('resize', onWindowResize);
 
