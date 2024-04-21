@@ -6,15 +6,15 @@ export const setupCssRenderer = (scene: Scene, camera: Camera, container: HTMLDi
     /////// Iframe Config ///////
     const iframeElement = document.createElement('iframe');
     iframeElement.src = src;
-    iframeElement.style.width = (420000 * 0.0007) + 'px';
-    iframeElement.style.height = (100000 * 0.0015) + 'px';
+    iframeElement.style.width = 800 + 'px';
+    iframeElement.style.height = 600 + 'px';
     //////////////////////////////////
 
     // Convert the HTML element into a CSS3DObject and add it to the scene
     const cssObject = new CSS3DObject(iframeElement);
-    cssObject.position.set(-0.0155, 0.39, 0.02); // Position as needed
+    cssObject.position.set(-0.0153, 0.39, 0.02); // Position as needed
     cssObject.rotation.x = 0;
-    cssObject.scale.set(0.0007,0.0015,0.001);
+    cssObject.scale.set(0.00026,0.00030,0.00028);
 
     scene.add(cssObject);
 

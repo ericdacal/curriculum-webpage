@@ -34,14 +34,14 @@ const Starfall: FC = memo(() => {
               </Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item>
-              <img src='sewersCorridor.webp' alt='Fourth slide'></img>
+              <img src='slides/starfall/slide0.webp' alt='Fourth slide'></img>
               <Carousel.Caption>
                 <h1>Second Level</h1>
                 <p>Desing, modelling and animation second level items</p>
               </Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item>
-              <img src='sewersCorridor.webp' alt='Fifth slide'></img>
+              <img src='slides/starfall/slide0.webp' alt='Fifth slide'></img>
               <Carousel.Caption>
                 <h1>Other Models</h1>
                 <p>Another models</p>
