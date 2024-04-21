@@ -20,18 +20,18 @@ const Portfolio: FC = memo(() => {
   const roofVentRef = useRef<THREE.Object3D | null>(null);
   // /////// HTML HANDLERS ///////
   //  // Handler for the left arrow click
-  // const handleLeftArrowClick = () => {
-  //   console.log('Left arrow clicked');
-  //   // Implement what happens when the left arrow is clicked
-  //   // For example, rotate the scene, move the camera, etc.
-  // };
+  const handleLeftArrowClick = () => {
+    console.log('Left arrow clicked');
+    // Implement what happens when the left arrow is clicked
+    // For example, rotate the scene, move the camera, etc.
+  };
 
   // // Handler for the right arrow click
-  // const handleRightArrowClick = () => {
-  //   console.log('Right arrow clicked');
-  //   // Implement what happens when the right arrow is clicked
-  //   // For example, rotate the scene, move the camera, etc.
-  // };
+  const handleRightArrowClick = () => {
+    console.log('Right arrow clicked');
+    // Implement what happens when the right arrow is clicked
+    // For example, rotate the scene, move the camera, etc.
+  };
   // ////////////////////////////
 
   
@@ -49,15 +49,19 @@ const Portfolio: FC = memo(() => {
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
-    const onClick = () => {
-      animateCameraToPosition(composer,renderer, scene, camera, new THREE.Vector3(0, 0.47, 0.17), new THREE.Euler(0, 0, 0),new THREE.Vector3(0, 0, -1), 2000, updateCss)
-      isOrbitingRef.current = false
-      //animateCameraToFrontView();
-      if (currentRef) {
-        currentRef.addEventListener('click', onClickRaycast); 
-        currentRef.removeEventListener('click', onClick);
+    const onClick = (event: MouseEvent) => {
+      const isArrowClick = (event.target as HTMLElement).classList.contains('arrow');
+      if(!isArrowClick) {
+        animateCameraToPosition(composer,renderer, scene, camera, new THREE.Vector3(0, 0.47, 0.17), new THREE.Euler(0, 0, 0),new THREE.Vector3(0, 0, -1), 2000, updateCss)
+        isOrbitingRef.current = false
+        //animateCameraToFrontView();
+        if (currentRef) {
+          currentRef.addEventListener('click', onClickRaycast); 
+          currentRef.removeEventListener('click', onClick);
+        }
       }
     }
+
     function onWindowResize() {
       const width = window.innerWidth;
       const height = window.innerHeight;
@@ -70,28 +74,34 @@ const Portfolio: FC = memo(() => {
     }
 
     const onClickRaycast = (event: MouseEvent) => {
-      // Calculate mouse position in normalized device coordinates (-1 to +1) for both components
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+      // Check if the click was on the lateral arrows
+      const isArrowClick = (event.target as HTMLElement).classList.contains('arrow');
     
-      // Update the picking ray with the camera and mouse position
-      raycaster.setFromCamera(mouse, camera);
+      if (!isArrowClick) {
+        // Calculate mouse position in normalized device coordinates (-1 to +1) for both components
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
     
-      // Calculate objects intersecting the picking ray
-      const intersects = raycaster.intersectObjects(scene.children, true);
-      let isArcadeMachineClicked = false
-      for (const intersect of intersects) {
-        isArcadeMachineClicked = isArcadeMachineClicked || intersect.object.name === 'ArcadeMachine'
-      }
-      if (!isArcadeMachineClicked) {
-        animateCameraToPosition(composer,renderer, scene, camera, new THREE.Vector3(0, 1, 1), new THREE.Euler(), new THREE.Vector3(0, 0, 0), 1000, updateCss)
-        isOrbitingRef.current = true;
-        if (currentRef) {
-          currentRef.addEventListener('click', onClick); 
-          currentRef.removeEventListener('click', onClickRaycast);
+        // Update the picking ray with the camera and mouse position
+        raycaster.setFromCamera(mouse, camera);
+    
+        // Calculate objects intersecting the picking ray
+        const intersects = raycaster.intersectObjects(scene.children, true);
+        let isArcadeMachineClicked = false;
+        for (const intersect of intersects) {
+          isArcadeMachineClicked = isArcadeMachineClicked || intersect.object.name === 'ArcadeMachine';
+        }
+        if (!isArcadeMachineClicked) {
+          animateCameraToPosition(composer, renderer, scene, camera, new THREE.Vector3(0, 1, 1), new THREE.Euler(), new THREE.Vector3(0, 0, 0), 1000, updateCss);
+          isOrbitingRef.current = true;
+          if (currentRef) {
+            currentRef.addEventListener('click', onClick);
+            currentRef.removeEventListener('click', onClickRaycast);
+          }
         }
       }
-    };
+    };    
+
     ////////////////////////////
     
     /////// SCENE SETUP ///////
@@ -395,7 +405,33 @@ const Portfolio: FC = memo(() => {
       ) : null}
   
       {/* This div acts as the container for the Three.js scene and is always rendered in the DOM */}
-      <div className={`portfolio-container ${!isSceneLoaded || !isAnimationDone ? 'hidden' : ''}`} ref={mountRef}></div>
+      <div className={`portfolio-container ${!isSceneLoaded || !isAnimationDone ? 'hidden' : ''}`}  ref={mountRef}>
+        <button className="arrow left-arrow" onClick={handleLeftArrowClick}>&lt;</button>
+        <button className="arrow right-arrow" onClick={handleRightArrowClick}>&gt;</button>
+        <style>
+          {`
+            .portfolio-container {
+              position: relative;
+              /* Your container styles */
+            }
+            .arrow {
+              position: fixed;
+              top: 50%;
+              background-color: transparent;
+              border: none;
+              font-size: 130px;
+              cursor: pointer;
+              z-index: 10;
+            }
+            .left-arrow {
+              left: 10px;
+            }
+            .right-arrow {
+              right: 10px;
+            }
+          `}
+        </style>
+      </div>
     </div>
   );
 });
