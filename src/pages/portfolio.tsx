@@ -403,35 +403,36 @@ const Portfolio: FC = memo(() => {
           <h1>Loading...</h1>
         </div>
       ) : null}
-  
-      {/* This div acts as the container for the Three.js scene and is always rendered in the DOM */}
-      <div className={`portfolio-container ${!isSceneLoaded || !isAnimationDone ? 'hidden' : ''}`}  ref={mountRef}>
-        <button className="arrow left-arrow" onClick={handleLeftArrowClick}>&lt;</button>
-        <button className="arrow right-arrow" onClick={handleRightArrowClick}>&gt;</button>
-        <style>
-          {`
-            .portfolio-container {
-              position: relative;
-              /* Your container styles */
-            }
-            .arrow {
-              position: fixed;
-              top: 50%;
-              background-color: transparent;
-              border: none;
-              font-size: 130px;
-              cursor: pointer;
-              z-index: 10;
-            }
-            .left-arrow {
-              left: 10px;
-            }
-            .right-arrow {
-              right: 10px;
-            }
-          `}
-        </style>
-      </div>
+      {isSceneLoaded && isAnimationDone ? (
+        <div>
+          <button className="arrow left-arrow" onClick={handleLeftArrowClick}>&lt;</button>
+          <button className="arrow right-arrow" onClick={handleRightArrowClick}>&gt;</button>
+          <style>
+            {`
+              .portfolio-container {
+                position: relative;
+                /* Your container styles */
+              }
+              .arrow {
+                position: fixed;
+                top: 50%;
+                background-color: transparent;
+                border: none;
+                font-size: 130px;
+                cursor: pointer;
+                z-index: 10;
+              }
+              .left-arrow {
+                left: 10px;
+              }
+              .right-arrow {
+                right: 10px;
+              }
+            `}
+          </style>
+        </div>
+      ) : null}
+      <div className={`portfolio-container ${!isSceneLoaded || !isAnimationDone ? 'hidden' : ''}`}  ref={mountRef}/>
     </div>
   );
 });
