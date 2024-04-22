@@ -4,7 +4,6 @@ import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer';
 
 export type ModelType = 'gltf' | 'box' | 'sphere' | 'cylinder' | 'plane';
 
-
 export function loadModelAtPosition(
   type: ModelType,
   pathOrGeometry: string | THREE.BufferGeometry,
@@ -13,18 +12,18 @@ export function loadModelAtPosition(
   scale: THREE.Vector3,
   scene: THREE.Scene,
   materialParams: THREE.MeshStandardMaterialParameters,
-  customMaterial?: THREE.Material
+  customMaterial?: THREE.Material,
 ): Promise<THREE.Object3D> {
   return new Promise((resolve, reject) => {
     if (type === 'gltf') {
       const loader = new GLTFLoader();
       loader.load(
         pathOrGeometry as string,
-        (gltf) => {
+        gltf => {
           const model: THREE.Object3D = gltf.scene;
           // If customMaterial is provided, apply it to all meshes in the model
           if (customMaterial) {
-            model.traverse((node) => {
+            model.traverse(node => {
               if ((node as THREE.Mesh).isMesh) {
                 (node as THREE.Mesh).material = customMaterial;
               }
@@ -34,7 +33,7 @@ export function loadModelAtPosition(
           resolve(model);
         },
         undefined,
-        (error) => handleError(error, reject)
+        error => handleError(error, reject),
       );
     } else {
       // The rest of your function remains unchanged
@@ -66,40 +65,55 @@ export function loadModelAtPosition(
   });
 }
 
-function setupModel(model: THREE.Object3D, position: THREE.Vector3, rotation: THREE.Euler, scale: THREE.Vector3, scene: THREE.Scene) {
-    model.position.copy(position);
-    model.rotation.copy(rotation);
-    model.scale.copy(scale);
-    model.traverse((node: THREE.Object3D) => {
-        if ((node as THREE.Mesh).isMesh) {
-            const mesh = node as THREE.Mesh;
-            mesh.castShadow = true;
-            mesh.receiveShadow = true;
-        }
-    });
-    scene.add(model);
+function setupModel(
+  model: THREE.Object3D,
+  position: THREE.Vector3,
+  rotation: THREE.Euler,
+  scale: THREE.Vector3,
+  scene: THREE.Scene,
+) {
+  model.position.copy(position);
+  model.rotation.copy(rotation);
+  model.scale.copy(scale);
+  model.traverse((node: THREE.Object3D) => {
+    if ((node as THREE.Mesh).isMesh) {
+      const mesh = node as THREE.Mesh;
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+    }
+  });
+  scene.add(model);
 }
-
 
 function handleError(err: unknown, reject: (reason?: unknown) => void) {
-    if (err instanceof ErrorEvent) {
-        console.error('An error happened during the model loading:', err.message);
-    } else {
-        console.error('An unexpected error happened during the model loading:', err);
-    }
-    reject(err);
+  if (err instanceof ErrorEvent) {
+    console.error('An error happened during the model loading:', err.message);
+  } else {
+    console.error('An unexpected error happened during the model loading:', err);
+  }
+  reject(err);
 }
 
-export function animateCameraToPosition(composer: EffectComposer,renderer: THREE.WebGLRenderer, scene: THREE.Scene, camera: THREE.Camera, targetPosition: THREE.Vector3, targetEuler: THREE.Euler, lookAtPosition: THREE.Vector3, duration: number, updateCss: () => void) {
+export function animateCameraToPosition(
+  composer: EffectComposer,
+  renderer: THREE.WebGLRenderer,
+  scene: THREE.Scene,
+  camera: THREE.Camera,
+  targetPosition: THREE.Vector3,
+  targetEuler: THREE.Euler,
+  lookAtPosition: THREE.Vector3,
+  duration: number,
+  updateCss: () => void,
+) {
   // Assume isOrbitingRef.current is available in your context for disabling orbiting
-  
+
   const startTime = performance.now();
 
   // Create a dummy object to interpolate the lookAt position
   const dummyTarget = new THREE.Object3D();
   scene.add(dummyTarget);
   dummyTarget.position.copy(camera.position); // Start at the camera's current position
-  
+
   const initialPosition = camera.position.clone();
   const initialQuaternion = camera.quaternion.clone();
   const targetQuaternion = new THREE.Quaternion().setFromEuler(targetEuler);
@@ -116,7 +130,7 @@ export function animateCameraToPosition(composer: EffectComposer,renderer: THREE
       // Interpolate dummy object's position towards the target lookAt position
       dummyTarget.position.lerpVectors(camera.position, lookAtPosition, fraction);
       camera.lookAt(dummyTarget.position); // Make the camera look at the dummy object
-      
+
       requestAnimationFrame(animate);
     } else {
       // Ensure final position, rotation, and lookAt are set
@@ -131,6 +145,6 @@ export function animateCameraToPosition(composer: EffectComposer,renderer: THREE
     composer.render();
     updateCss();
   }
-  
+
   animate();
 }

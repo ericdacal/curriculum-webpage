@@ -9,7 +9,6 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-       
         {/* google translate breaks react:
           - https://github.com/facebook/react/issues/11538
           - https://bugs.chromium.org/p/chromium/issues/detail?id=872770 */}
