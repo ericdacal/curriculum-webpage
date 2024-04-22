@@ -361,3 +361,12 @@ th {
   pointer-events: none;
   animation: flicker 0.15s infinite;
 }
+
+.custom-carousel {
+  background-color: black;
+  color: white;
+}
+
+.custom-carousel .carousel-caption {
+  background-color: transparent; /* Remove the background color of the caption */
+}
