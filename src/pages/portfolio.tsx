@@ -64,12 +64,16 @@ const Portfolio: FC = memo(() => {
       ) : null}
       {isSceneLoaded && isAnimationDone ? (
         <div>
-          <button className="arrow left-arrow" onClick={handleLeftArrowClick}>
-            &lt;
-          </button>
-          <button className="arrow right-arrow" onClick={handleRightArrowClick}>
-            &gt;
-          </button>
+          {currentScene > 0 && ( // Check if currentScene is greater than 1
+            <button className="arrow left-arrow" onClick={handleLeftArrowClick}>
+              &lt;
+            </button>
+          )}
+          {currentScene < (scenes.length-1) && (
+              <button className="arrow right-arrow" onClick={handleRightArrowClick}>
+              &gt;
+            </button>
+          )}
           <style>
             {`
               .portfolio-container {
