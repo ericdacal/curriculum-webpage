@@ -1,4 +1,4 @@
-import React, {FC, memo, useEffect,useRef} from 'react';
+import React, {FC, memo, useEffect, useRef} from 'react';
 import * as THREE from 'three';
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer';
 import {RenderPass} from 'three/examples/jsm/postprocessing/RenderPass';
@@ -18,7 +18,9 @@ interface StarfallSceneProps {
 const StarfallScene: FC<StarfallSceneProps> = memo(
   ({isAnimationDone, isSceneLoaded, mountRef, setIsAnimationDone, setIsSceneLoaded}) => {
     const isOrbitingRef = useRef(true);
-    const roofVentRef = useRef<THREE.Object3D | null>(null);
+    const mixerRef = useRef<THREE.AnimationMixer | undefined>(undefined); // Cambio aquí
+    const lastOrbitPositionRef = useRef<THREE.Vector3>(new THREE.Vector3()); // Store the last orbit position
+    // const roofVentRef = useRef<THREE.Object3D | null>(null);
 
     useEffect(() => {
       const currentRef = mountRef.current;
@@ -37,16 +39,18 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
       const onClick = (event: MouseEvent) => {
         const isArrowClick = (event.target as HTMLElement).classList.contains('arrow');
         if (!isArrowClick) {
+          lastOrbitPositionRef.current = camera.position.clone();
           animateCameraToPosition(
             composer,
             renderer,
             scene,
             camera,
-            new THREE.Vector3(0, 0.47, 0.17),
+            new THREE.Vector3(0, 0.47, 0.72),
             new THREE.Euler(0, 0, 0),
             new THREE.Vector3(0, 0, -1),
             2000,
             updateCss,
+            mixerRef.current
           );
           isOrbitingRef.current = false;
           //animateCameraToFrontView();
@@ -92,11 +96,12 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
               renderer,
               scene,
               camera,
-              new THREE.Vector3(0, 1, 1),
+              lastOrbitPositionRef.current,
               new THREE.Euler(),
               new THREE.Vector3(0, 0, 0),
               1000,
               updateCss,
+              mixerRef.current
             );
             isOrbitingRef.current = true;
             if (currentRef) {
@@ -146,182 +151,97 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
         scene,
         camera,
         mountRef.current,
-        'https://eric-dacal.vercel.app/starfall',
+        'http://localhost:3000/starfall',
       );
       ////////////////////////////
-
-      /////// ADD CREATE CUSTOM MATERIALS ///////
-      /////// GROUND MATERIAL ///////
-      const repeatValueGround = 125;
-      const groundBaseColor = new THREE.TextureLoader().load('ground\\Ground_basecolor.png');
-      groundBaseColor.repeat.set(repeatValueGround, repeatValueGround);
-      groundBaseColor.wrapS = groundBaseColor.wrapT = THREE.RepeatWrapping;
-      const groundMetallicMap = new THREE.TextureLoader().load('ground\\Ground_metallic.png');
-      groundMetallicMap.repeat.set(repeatValueGround, repeatValueGround);
-      groundMetallicMap.wrapS = groundMetallicMap.wrapT = THREE.RepeatWrapping;
-      const groundNormalMap = new THREE.TextureLoader().load('ground\\Ground_normal.png');
-      groundNormalMap.repeat.set(repeatValueGround, repeatValueGround);
-      groundNormalMap.wrapS = groundNormalMap.wrapT = THREE.RepeatWrapping;
-      const groundMaterial = {
-        map: groundBaseColor, // base color texture
-        metalnessMap: groundMetallicMap, // metallic texture
-        normalMap: groundNormalMap, // normal map texture
-        receiveShadow: true,
-      };
-
-      ////////////////////////////
-
-      /////// Wall MATERIAL ///////
-      const repeatValueWall = 40;
-      const wallBaseColor = new THREE.TextureLoader().load('wall\\BarWall_basecolor.png');
-      wallBaseColor.repeat.set(repeatValueWall, 2);
-      wallBaseColor.wrapS = wallBaseColor.wrapT = THREE.RepeatWrapping;
-      const wallMetallicMap = new THREE.TextureLoader().load('wall\\BarWall_metallic.png');
-      wallMetallicMap.repeat.set(repeatValueWall, 2);
-      wallMetallicMap.wrapS = wallMetallicMap.wrapT = THREE.RepeatWrapping;
-      const wallNormalMap = new THREE.TextureLoader().load('wall\\BarWall_normal.png');
-      wallNormalMap.repeat.set(repeatValueWall, 2);
-      wallNormalMap.wrapS = wallNormalMap.wrapT = THREE.RepeatWrapping;
-      const wallMaterial = {
-        map: wallBaseColor, // base color texture
-        metalnessMap: wallMetallicMap, // metallic texture
-        normalMap: wallNormalMap, // normal map texture
-        receiveShadow: true,
-      };
-      const emissionMaterialParams = {
-        color: 0x00ff00, // Base color of the material
-        emissive: 0xff0000, // Emissive color (red in this case)
-        emissiveIntensity: 2.5, // Intensity of the emissive effect
-      };
+      // const emissionMaterialParams = {
+      //   color: 0x00ff00, // Base color of the material
+      //   emissive: 0xff0000, // Emissive color (red in this case)
+      //   emissiveIntensity: 2.5, // Intensity of the emissive effect
+      // };
       ////////////////////////////
       ////////////////////////////
 
       //const materialParams = {color: 0xbcbcbc, roughness: 0.1, metalness: 0}
       const materialParams = {color: 0xffffff};
       const modelType: ModelType = 'gltf';
-      const boxType: ModelType = 'box';
+      //const boxType: ModelType = 'box';
       //const planeType: ModelType = 'plane';
-      const cylinderType: ModelType = 'cylinder';
+      //const cylinderType: ModelType = 'cylinder';
 
       /////// MODELS LOAD  ///////
       const modelsToLoad = [
-        {
+                {
           type: modelType,
           path: 'arcade_machine.glb',
-          position: new THREE.Vector3(0, 0, -0.0),
+          position: new THREE.Vector3(0, 0, 0.55),
           rotation: new THREE.Euler(0, (3 * Math.PI) / 2),
           scale: new THREE.Vector3(0.1, 0.1, 0.1),
           material: materialParams,
           customMaterial: undefined,
         },
-        //{type: planeType, path: '', position: new THREE.Vector3(-0.02,0.4,0.05), rotation: new THREE.Euler(0,2*Math.PI,0), scale: new THREE.Vector3(0.2,0.17,1), material: materialParams, customMaterial: crtMaterial},
         {
-          type: boxType,
-          path: '',
-          position: new THREE.Vector3(0, -0.1, 0),
+          type: modelType,
+          path: 'models\\starfall\\cantina_general_floor\\cantina_ground.glb',
+          position: new THREE.Vector3(-0.5, 0, 1),
+          rotation: new THREE.Euler(0, 0, 0),
+          scale: new THREE.Vector3(13, 1, 13),
+          material: materialParams,
+          customMaterial: undefined
+        },
+        {
+          type: modelType,
+          path: 'models\\starfall\\cantina_wall\\cantina_wall_all.glb',
+          position: new THREE.Vector3(-1.5, 0.7, -0.1),
+          rotation: new THREE.Euler(0, 0, 0),
+          scale: new THREE.Vector3(0.20, 0.20, 0.20),
+          material: materialParams,
+          customMaterial: undefined,
+        },
+        {
+          type: modelType,
+          path: 'models\\starfall\\cantina_pathway\\cantina_pathway.glb',
+          position: new THREE.Vector3(-1.2,0.1, 0.3),
+          rotation: new THREE.Euler(0,Math.PI / 2,0),
+          scale: new THREE.Vector3(6,6,6),
+          material: materialParams,
+          customMaterial: undefined,
+        },
+        // {
+        //   type: modelType,
+        //   path: 'sign\\neon_sign.glb',
+        //   position: new THREE.Vector3(0, 0.6, -0.2),
+        //   rotation: new THREE.Euler(Math.PI / 2, 0, 0),
+        //   scale: new THREE.Vector3(0.2, 0.2, 0.2),
+        //   material: emissionMaterialParams,
+        //   customMaterial: new THREE.MeshStandardMaterial(emissionMaterialParams),
+        // },
+        {
+          type: modelType,
+          path: 'models\\starfall\\cantina_table\\cantina_table.glb',
+          position: new THREE.Vector3(1.0, 0.05, 1.0),
+          rotation: new THREE.Euler(0, 0, 0),
+          scale: new THREE.Vector3(0.03, 0.03, 0.03),
+          material: materialParams,
+          customMaterial: undefined
+        },
+        {
+          type: modelType,
+          path: 'models\\starfall\\cantina_table\\cantina_table.glb',
+          position: new THREE.Vector3(-0.6, 0.05, 1.5),
+          rotation: new THREE.Euler(0, 0, 0),
+          scale: new THREE.Vector3(0.03, 0.03, 0.03),
+          material: materialParams,
+          customMaterial: undefined
+        },
+        {
+          type: modelType,
+          path: 'models\\starfall\\cantina_drunked\\cantina_drunked.glb',
+          position: new THREE.Vector3(-0.4, 0.2, 0.5),
           rotation: new THREE.Euler(Math.PI / 2, 0, 0),
-          scale: new THREE.Vector3(100, 100, 0.1),
-          material: groundMaterial,
-          customMaterial: undefined,
-        },
-        {
-          type: boxType,
-          path: '',
-          position: new THREE.Vector3(0, 0.5, -0.7),
-          rotation: new THREE.Euler(0, 0, 0),
-          scale: new THREE.Vector3(15, 1, 1),
-          material: wallMaterial,
-          customMaterial: undefined,
-        },
-        {
-          type: boxType,
-          path: '',
-          position: new THREE.Vector3(-1.5, 0.5, -0.7),
-          rotation: new THREE.Euler(0, Math.PI / 2, 0),
-          scale: new THREE.Vector3(15, 1, 1),
-          material: wallMaterial,
-          customMaterial: undefined,
-        },
-        {
-          type: cylinderType,
-          path: '',
-          position: new THREE.Vector3(0, 0, -0.183),
-          rotation: new THREE.Euler(0, 0, Math.PI / 2),
-          scale: new THREE.Vector3(0.02, 10, 0.02),
-          material: emissionMaterialParams,
-          customMaterial: undefined,
-        },
-        {
-          type: cylinderType,
-          path: '',
-          position: new THREE.Vector3(-1, 0, -0.183),
-          rotation: new THREE.Euler(0, Math.PI / 2, Math.PI / 2),
-          scale: new THREE.Vector3(0.02, 10, 0.02),
-          material: emissionMaterialParams,
-          customMaterial: undefined,
-        },
-        {
-          type: modelType,
-          path: 'sign\\neon_sign.glb',
-          position: new THREE.Vector3(0, 0.6, -0.2),
-          rotation: new THREE.Euler(Math.PI / 2, 0, 0),
-          scale: new THREE.Vector3(0.2, 0.2, 0.2),
-          material: emissionMaterialParams,
-          customMaterial: new THREE.MeshStandardMaterial(emissionMaterialParams),
-        },
-        {
-          type: modelType,
-          path: 'roof-vent\\roof_vent.glb',
-          position: new THREE.Vector3(0, 0.8, 1.15),
-          rotation: new THREE.Euler(0, 0, 0),
-          scale: new THREE.Vector3(0.1, 0.1, 0.1),
+          scale: new THREE.Vector3(5, 5, 5),
           material: materialParams,
-          customMaterial: undefined,
-        },
-        {
-          type: modelType,
-          path: 'stool\\stool.glb',
-          position: new THREE.Vector3(0.5, 0.1, 0),
-          rotation: new THREE.Euler(0, 0, 0),
-          scale: new THREE.Vector3(0.035, 0.035, 0.035),
-          material: materialParams,
-          customMaterial: undefined,
-        },
-        {
-          type: modelType,
-          path: 'table\\table.glb',
-          position: new THREE.Vector3(0.69, 0.0, 0),
-          rotation: new THREE.Euler(0, 0, 0),
-          scale: new THREE.Vector3(0.07, 0.07, 0.07),
-          material: materialParams,
-          customMaterial: undefined,
-        },
-        {
-          type: modelType,
-          path: 'pub\\pub.glb',
-          position: new THREE.Vector3(0.895, 0.05, 0),
-          rotation: new THREE.Euler(0, 0, 0),
-          scale: new THREE.Vector3(0.07, 0.07, 0.07),
-          material: materialParams,
-          customMaterial: undefined,
-        },
-        {
-          type: modelType,
-          path: 'stool\\stool.glb',
-          position: new THREE.Vector3(0.1, 0.1, 0.6),
-          rotation: new THREE.Euler(0, 0, 0),
-          scale: new THREE.Vector3(0.035, 0.035, 0.035),
-          material: materialParams,
-          customMaterial: undefined,
-        },
-        {
-          type: modelType,
-          path: 'table\\table.glb',
-          position: new THREE.Vector3(0.29, 0.0, 0.6),
-          rotation: new THREE.Euler(0, 0, 0),
-          scale: new THREE.Vector3(0.07, 0.07, 0.07),
-          material: materialParams,
-          customMaterial: undefined,
+          customMaterial: undefined
         },
       ];
       Promise.all(
@@ -335,12 +255,16 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
             scene,
             model.material,
             model.customMaterial,
-          ).then(loadedModel => {
+            mixerRef.current
+          ).then(({ model, mixer }) => {
             // Here, you check if the loaded model is the roof vent and set the ref accordingly
-            if (model.path.includes('roof-vent')) {
-              roofVentRef.current = loadedModel;
+            // if (model.path.includes('roof-vent')) {
+            //   roofVentRef.current = loadedModel;
+            // }
+            if (mixer) {
+              mixerRef.current = mixer;
             }
-            return loadedModel; // Return the loaded model for consistency
+            return model; // Return the loaded model for consistency
           });
         }),
       )
@@ -373,7 +297,7 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
       // light.castShadow = true;
       // scene.add(light);
 
-      const pointLight = new THREE.PointLight(0xffffff, 1, 0, 3);
+      const pointLight = new THREE.PointLight(0xffffff, 2, 0, 3);
       pointLight.position.set(-0.1, 1.3, 1.9);
       pointLight.castShadow = true;
       pointLight.shadow.camera.far = 500;
@@ -440,6 +364,7 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
 
       const animateOrbitCamera = function () {
         requestAnimationFrame(animateOrbitCamera);
+        const center = new THREE.Vector3(0, 0, 0.55); 
         const radius = 1; // Example value, adjust as needed
         const height = 1; // Height from the base, creates a diagonal angle
         const minAngle = -(Math.PI / 6);
@@ -454,14 +379,15 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
             angleIncrement = -angleIncrement; // Reverse the increment direction
           }
 
-          camera.position.x = radius * Math.sin(angle);
-          camera.position.z = radius * Math.cos(angle);
+          camera.position.x = center.x + radius * Math.sin(angle);
+          camera.position.z = center.z + radius * Math.cos(angle);
           camera.position.y = height;
-          camera.lookAt(scene.position);
+          camera.lookAt(center);
         }
-        if (roofVentRef.current) {
-          roofVentRef.current.rotation.y += 0.01; // Adjust rotation speed as needed
-        }
+        // if (roofVentRef.current) {
+        //   roofVentRef.current.rotation.y += 0.01; // Adjust rotation speed as needed
+        // }
+        mixerRef.current?.update(0.01)
         renderer.render(scene, camera);
         composer.render();
         updateCss();

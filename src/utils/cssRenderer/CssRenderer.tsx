@@ -11,7 +11,7 @@ export const setupCssRenderer = (scene: Scene, camera: Camera, container: HTMLDi
 
   // Convert the HTML element into a CSS3DObject and add it to the scene
   const cssObject = new CSS3DObject(iframeElement);
-  cssObject.position.set(-0.0153, 0.39, 0.02); // Position as needed
+  cssObject.position.set(-0.0153, 0.39, 0.57); // Position as needed
   cssObject.rotation.x = 0;
   cssObject.scale.set(0.00026, 0.0003, 0.00028);
 

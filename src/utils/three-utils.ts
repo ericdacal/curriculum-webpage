@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { AnimationClip, LoopRepeat } from 'three';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
 import {EffectComposer} from 'three/examples/jsm/postprocessing/EffectComposer';
 
@@ -13,7 +14,8 @@ export function loadModelAtPosition(
   scene: THREE.Scene,
   materialParams: THREE.MeshStandardMaterialParameters,
   customMaterial?: THREE.Material,
-): Promise<THREE.Object3D> {
+  mixer?: THREE.AnimationMixer 
+): Promise<{ model: THREE.Object3D, mixer: THREE.AnimationMixer | undefined }> {
   return new Promise((resolve, reject) => {
     if (type === 'gltf') {
       const loader = new GLTFLoader();
@@ -21,6 +23,20 @@ export function loadModelAtPosition(
         pathOrGeometry as string,
         gltf => {
           const model: THREE.Object3D = gltf.scene;
+
+          if (gltf.animations && gltf.animations.length > 0) { 
+              mixer = new THREE.AnimationMixer(model);
+              // Play each animation with a default loop
+              gltf.animations.forEach((clip: AnimationClip) => {
+                if(mixer)  {
+                    const action = mixer.clipAction(clip);
+                    action.setLoop(LoopRepeat, 1000); // Change this if you want different looping behavior
+                    action.play();
+                }
+              });
+}
+
+
           // If customMaterial is provided, apply it to all meshes in the model
           if (customMaterial) {
             model.traverse(node => {
@@ -30,7 +46,7 @@ export function loadModelAtPosition(
             });
           }
           setupModel(model, position, rotation, scale, scene);
-          resolve(model);
+          resolve({ model, mixer });
         },
         undefined,
         error => handleError(error, reject),
@@ -60,7 +76,7 @@ export function loadModelAtPosition(
       mesh.castShadow = true;
       mesh.receiveShadow = true;
       setupModel(mesh, position, rotation, scale, scene);
-      resolve(mesh);
+      resolve({ model: mesh, mixer: undefined });
     }
   });
 }
@@ -104,6 +120,7 @@ export function animateCameraToPosition(
   lookAtPosition: THREE.Vector3,
   duration: number,
   updateCss: () => void,
+  mixer: THREE.AnimationMixer | undefined
 ) {
   // Assume isOrbitingRef.current is available in your context for disabling orbiting
 
@@ -141,6 +158,7 @@ export function animateCameraToPosition(
     }
 
     // Update the scene
+    mixer?.update(0.01)
     renderer.render(scene, camera);
     composer.render();
     updateCss();

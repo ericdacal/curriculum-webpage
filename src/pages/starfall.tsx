@@ -6,10 +6,10 @@ const Starfall: FC = memo(() => {
     <div className="crt-starfall">
       <Carousel>
         <Carousel.Item>
-          <img alt="Presentation slide" src="slides/starfall/slide0.webp"></img>
+          <img alt="Presentation slide" src="slides/starfall/1.png"></img>
           <Carousel.Caption>
             <h1>Starfall Rebellion</h1>
-            <p>Master's Degree Project, where we develop a Lego Star Wars game</p>
+            <p>Master's Degree Project, where we develop a  Lego Star Wars game<a href="https://starfall-rebellion.vercel.app/" target="_blank">(Web)</a></p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
@@ -48,6 +48,14 @@ const Starfall: FC = memo(() => {
           </Carousel.Caption>
         </Carousel.Item>
       </Carousel>
+      <style>
+      {`
+          a {
+              color: yellow; 
+              text-decoration: none;
+          }
+      `}
+      </style>
     </div>
   );
 });

@@ -2,6 +2,7 @@ import React, {FC, memo, useRef, useState} from 'react';
 
 import DoesNotCommute from './scenes/doesnotcommutescene';
 import StarfallScene from './scenes/starfallscene';
+import ArgochamberScene from './scenes/argochamberscene';
 
 const Portfolio: FC = memo(() => {
   const mountRef = useRef<HTMLDivElement | null>(null);
@@ -28,6 +29,18 @@ const Portfolio: FC = memo(() => {
           isAnimationDone={isAnimationDone}
           isSceneLoaded={isSceneLoaded}
           key={2}
+          mountRef={mountRef}
+          setIsAnimationDone={setIsAnimationDone}
+          setIsSceneLoaded={setIsSceneLoaded}
+        />
+      ),
+    },
+    {
+      component: (
+        <ArgochamberScene
+          isAnimationDone={isAnimationDone}
+          isSceneLoaded={isSceneLoaded}
+          key={3}
           mountRef={mountRef}
           setIsAnimationDone={setIsAnimationDone}
           setIsSceneLoaded={setIsSceneLoaded}

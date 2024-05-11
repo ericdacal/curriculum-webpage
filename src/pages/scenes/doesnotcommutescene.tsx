@@ -7,7 +7,7 @@ import {UnrealBloomPass} from 'three/examples/jsm/postprocessing/UnrealBloomPass
 import {setupCssRenderer} from '../../utils/cssRenderer/CssRenderer';
 import {animateCameraToPosition, loadModelAtPosition, ModelType} from '../../utils/three-utils';
 
-interface StarfallSceneProps {
+interface DoesNotCommuteSceneProps {
   isAnimationDone: boolean;
   isSceneLoaded: boolean;
   mountRef: React.RefObject<HTMLDivElement>;
@@ -15,10 +15,11 @@ interface StarfallSceneProps {
   setIsSceneLoaded: (value: boolean) => void;
 }
 
-const StarfallScene: FC<StarfallSceneProps> = memo(
+const DoesNotCommuteScene: FC<DoesNotCommuteSceneProps> = memo(
   ({isAnimationDone, isSceneLoaded, mountRef, setIsAnimationDone, setIsSceneLoaded}) => {
     const isOrbitingRef = useRef(true);
     const roofVentRef = useRef<THREE.Object3D | null>(null);
+    const mixerRef = useRef<THREE.AnimationMixer | undefined>(undefined);
 
     useEffect(() => {
       const currentRef = mountRef.current;
@@ -47,6 +48,7 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
             new THREE.Vector3(0, 0, -1),
             2000,
             updateCss,
+            mixerRef.current
           );
           isOrbitingRef.current = false;
           //animateCameraToFrontView();
@@ -97,6 +99,7 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
               new THREE.Vector3(0, 0, 0),
               1000,
               updateCss,
+              mixerRef.current
             );
             isOrbitingRef.current = true;
             if (currentRef) {
@@ -146,7 +149,7 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
         scene,
         camera,
         mountRef.current,
-        'https://eric-dacal.vercel.app/doesnotcommute',
+        'http://localhost:3000/doesnotcommute',
       );
       ////////////////////////////
 
@@ -263,12 +266,16 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
             scene,
             model.material,
             model.customMaterial,
-          ).then(loadedModel => {
+          ).then(({ model }) => {
             // Here, you check if the loaded model is the roof vent and set the ref accordingly
-            if (model.path.includes('roof-vent')) {
-              roofVentRef.current = loadedModel;
+            // if (model.path.includes('roof-vent')) {
+            //   roofVentRef.current = model;
+            // }
+            const roofVentModel = scene.children.find(child => (child.userData.path || '').includes('roof-vent'));
+            if (roofVentModel) {
+              roofVentRef.current = roofVentModel;
             }
-            return loadedModel; // Return the loaded model for consistency
+            return model; // Return the loaded model for consistency
           });
         }),
       )
@@ -390,6 +397,7 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
         if (roofVentRef.current) {
           roofVentRef.current.rotation.y += 0.01; // Adjust rotation speed as needed
         }
+        mixerRef.current?.update(0.01)
         renderer.render(scene, camera);
         composer.render();
         updateCss();
@@ -439,4 +447,4 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
   },
 );
 
-export default StarfallScene;
+export default DoesNotCommuteScene;
