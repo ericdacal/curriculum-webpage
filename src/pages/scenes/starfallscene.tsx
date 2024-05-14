@@ -151,7 +151,7 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
         scene,
         camera,
         mountRef.current,
-        'http://localhost:3000/starfall',
+        'https://eric-dacal.vercel.app/starfall',
       );
       ////////////////////////////
       // const emissionMaterialParams = {
