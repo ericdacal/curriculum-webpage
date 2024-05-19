@@ -18,8 +18,8 @@ interface ArgochamberSceneProps {
 const ArgochamberScene: FC<ArgochamberSceneProps> = memo(
   ({isAnimationDone, isSceneLoaded, mountRef, setIsAnimationDone, setIsSceneLoaded}) => {
     const isOrbitingRef = useRef(true);
-    const roofVentRef = useRef<THREE.Object3D | null>(null);
     const mixerRef = useRef<THREE.AnimationMixer | undefined>(undefined);
+    const lastOrbitPositionRef = useRef<THREE.Vector3>(new THREE.Vector3());
 
     useEffect(() => {
       const currentRef = mountRef.current;
@@ -38,12 +38,13 @@ const ArgochamberScene: FC<ArgochamberSceneProps> = memo(
       const onClick = (event: MouseEvent) => {
         const isArrowClick = (event.target as HTMLElement).classList.contains('arrow');
         if (!isArrowClick) {
+          lastOrbitPositionRef.current = camera.position.clone();
           animateCameraToPosition(
             composer,
             renderer,
             scene,
             camera,
-            new THREE.Vector3(0, 0.47, 0.17),
+            new THREE.Vector3(0, 0.47, 0.85),
             new THREE.Euler(0, 0, 0),
             new THREE.Vector3(0, 0, -1),
             2000,
@@ -94,7 +95,7 @@ const ArgochamberScene: FC<ArgochamberSceneProps> = memo(
               renderer,
               scene,
               camera,
-              new THREE.Vector3(0, 1, 1),
+              lastOrbitPositionRef.current,
               new THREE.Euler(),
               new THREE.Vector3(0, 0, 0),
               1000,
@@ -152,108 +153,64 @@ const ArgochamberScene: FC<ArgochamberSceneProps> = memo(
         'https://eric-dacal.vercel.app/doesnotcommute',
       );
       ////////////////////////////
-
-      /////// ADD CREATE CUSTOM MATERIALS ///////
-      /////// GROUND MATERIAL ///////
-      const repeatValueGround = 125;
-      const groundBaseColor = new THREE.TextureLoader().load('ground\\Ground_basecolor.png');
-      groundBaseColor.repeat.set(repeatValueGround, repeatValueGround);
-      groundBaseColor.wrapS = groundBaseColor.wrapT = THREE.RepeatWrapping;
-      const groundMetallicMap = new THREE.TextureLoader().load('ground\\Ground_metallic.png');
-      groundMetallicMap.repeat.set(repeatValueGround, repeatValueGround);
-      groundMetallicMap.wrapS = groundMetallicMap.wrapT = THREE.RepeatWrapping;
-      const groundNormalMap = new THREE.TextureLoader().load('ground\\Ground_normal.png');
-      groundNormalMap.repeat.set(repeatValueGround, repeatValueGround);
-      groundNormalMap.wrapS = groundNormalMap.wrapT = THREE.RepeatWrapping;
-      const groundMaterial = {
-        map: groundBaseColor, // base color texture
-        metalnessMap: groundMetallicMap, // metallic texture
-        normalMap: groundNormalMap, // normal map texture
-        receiveShadow: true,
-      };
-
+      
+      
       ////////////////////////////
-
-      /////// Wall MATERIAL ///////
-      const repeatValueWall = 40;
-      const wallBaseColor = new THREE.TextureLoader().load('wall\\BarWall_basecolor.png');
-      wallBaseColor.repeat.set(repeatValueWall, 2);
-      wallBaseColor.wrapS = wallBaseColor.wrapT = THREE.RepeatWrapping;
-      const wallMetallicMap = new THREE.TextureLoader().load('wall\\BarWall_metallic.png');
-      wallMetallicMap.repeat.set(repeatValueWall, 2);
-      wallMetallicMap.wrapS = wallMetallicMap.wrapT = THREE.RepeatWrapping;
-      const wallNormalMap = new THREE.TextureLoader().load('wall\\BarWall_normal.png');
-      wallNormalMap.repeat.set(repeatValueWall, 2);
-      wallNormalMap.wrapS = wallNormalMap.wrapT = THREE.RepeatWrapping;
-      const wallMaterial = {
-        map: wallBaseColor, // base color texture
-        metalnessMap: wallMetallicMap, // metallic texture
-        normalMap: wallNormalMap, // normal map texture
-        receiveShadow: true,
-      };
-      const emissionMaterialParams = {
-        color: 0x00ff00, // Base color of the material
-        emissive: 0xff0000, // Emissive color (red in this case)
-        emissiveIntensity: 2.5, // Intensity of the emissive effect
-      };
-      ////////////////////////////
-      ////////////////////////////
-
       //const materialParams = {color: 0xbcbcbc, roughness: 0.1, metalness: 0}
       const materialParams = {color: 0xffffff};
       const modelType: ModelType = 'gltf';
-      const boxType: ModelType = 'box';
+      //const boxType: ModelType = 'box';
       //const planeType: ModelType = 'plane';
-      const cylinderType: ModelType = 'cylinder';
+      //const cylinderType: ModelType = 'cylinder';
 
       /////// MODELS LOAD  ///////
       const modelsToLoad = [
         {
           type: modelType,
-          path: 'arcade_machine.glb',
-          position: new THREE.Vector3(0, 0, -0.0),
+          path: 'models\\argochamber\\argochamber_wall.glb',
+          position: new THREE.Vector3(-0.9, 0.34, -0.3),
+          rotation: new THREE.Euler(0, 0, 0),
+          scale: new THREE.Vector3(0.2, 0.2, 0.2),
+          material: materialParams,
+          customMaterial: undefined,
+        },
+        {
+          type: modelType,
+          path: 'futuristic_computer.glb',
+          position: new THREE.Vector3(0, 0.02, 0.65),
           rotation: new THREE.Euler(0, (3 * Math.PI) / 2),
-          scale: new THREE.Vector3(0.1, 0.1, 0.1),
+          scale: new THREE.Vector3(0.08, 0.08, 0.08),
           material: materialParams,
           customMaterial: undefined,
         },
         //{type: planeType, path: '', position: new THREE.Vector3(-0.02,0.4,0.05), rotation: new THREE.Euler(0,2*Math.PI,0), scale: new THREE.Vector3(0.2,0.17,1), material: materialParams, customMaterial: crtMaterial},
-        {
-          type: boxType,
-          path: '',
-          position: new THREE.Vector3(0, -0.1, 0),
-          rotation: new THREE.Euler(Math.PI / 2, 0, 0),
-          scale: new THREE.Vector3(100, 100, 0.1),
-          material: groundMaterial,
-          customMaterial: undefined,
-        },
-        {
-          type: boxType,
-          path: '',
-          position: new THREE.Vector3(0, 0.5, -0.7),
-          rotation: new THREE.Euler(0, 0, 0),
-          scale: new THREE.Vector3(15, 1, 1),
-          material: wallMaterial,
-          customMaterial: undefined,
-        },
-        {
-          type: boxType,
-          path: '',
-          position: new THREE.Vector3(-1.5, 0.5, -0.7),
-          rotation: new THREE.Euler(0, Math.PI / 2, 0),
-          scale: new THREE.Vector3(15, 1, 1),
-          material: wallMaterial,
-          customMaterial: undefined,
-        },
-        {
-          type: cylinderType,
-          path: '',
-          position: new THREE.Vector3(0, 0, -0.183),
-          rotation: new THREE.Euler(0, 0, Math.PI / 2),
-          scale: new THREE.Vector3(0.02, 10, 0.02),
-          material: emissionMaterialParams,
-          customMaterial: undefined,
-        },
+        // {
+        //   type: boxType,
+        //   path: '',
+        //   position: new THREE.Vector3(0, 0.5, -0.7),
+        //   rotation: new THREE.Euler(0, 0, 0),
+        //   scale: new THREE.Vector3(15, 1, 1),
+        //   material: wallMaterial,
+        //   customMaterial: undefined,
+        // },
+        // {
+        //   type: boxType,
+        //   path: '',
+        //   position: new THREE.Vector3(-1.5, 0.5, -0.7),
+        //   rotation: new THREE.Euler(0, Math.PI / 2, 0),
+        //   scale: new THREE.Vector3(15, 1, 1),
+        //   material: wallMaterial,
+        //   customMaterial: undefined,
+        // },
+        // {
+        //   type: cylinderType,
+        //   path: '',
+        //   position: new THREE.Vector3(0, 0, -0.183),
+        //   rotation: new THREE.Euler(0, 0, Math.PI / 2),
+        //   scale: new THREE.Vector3(0.02, 10, 0.02),
+        //   material: emissionMaterialParams,
+        //   customMaterial: undefined,
+        // },
       ];
       Promise.all(
         modelsToLoad.map(model => {
@@ -371,6 +328,7 @@ const ArgochamberScene: FC<ArgochamberSceneProps> = memo(
 
       const animateOrbitCamera = function () {
         requestAnimationFrame(animateOrbitCamera);
+        const center = new THREE.Vector3(0, 0, 0.55); 
         const radius = 1; // Example value, adjust as needed
         const height = 1; // Height from the base, creates a diagonal angle
         const minAngle = -(Math.PI / 6);
@@ -385,17 +343,15 @@ const ArgochamberScene: FC<ArgochamberSceneProps> = memo(
             angleIncrement = -angleIncrement; // Reverse the increment direction
           }
 
-          camera.position.x = radius * Math.sin(angle);
-          camera.position.z = radius * Math.cos(angle);
+          camera.position.x = center.x + radius * Math.sin(angle);
+          camera.position.z = center.z + radius * Math.cos(angle);
           camera.position.y = height;
-          camera.lookAt(scene.position);
+          camera.lookAt(center);
         }
-        
-
-        if (roofVentRef.current) {
-          roofVentRef.current.rotation.y += 0.01; // Adjust rotation speed as needed
-        }
-        mixerRef.current?.update(0.01);
+        // if (roofVentRef.current) {
+        //   roofVentRef.current.rotation.y += 0.01; // Adjust rotation speed as needed
+        // }
+        mixerRef.current?.update(0.01)
         renderer.render(scene, camera);
         composer.render();
         updateCss();

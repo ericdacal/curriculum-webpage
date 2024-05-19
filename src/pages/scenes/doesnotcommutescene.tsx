@@ -254,6 +254,24 @@ const DoesNotCommuteScene: FC<DoesNotCommuteSceneProps> = memo(
           material: emissionMaterialParams,
           customMaterial: undefined,
         },
+        {
+          type: modelType,
+          path: 'models\\does_not_commute\\table.glb',
+          position: new THREE.Vector3(1.0, 0.05, 0.0),
+          rotation: new THREE.Euler(0, 0, 0),
+          scale: new THREE.Vector3(0.04, 0.04, 0.04),
+          material: materialParams,
+          customMaterial: undefined
+        },
+        {
+          type: modelType,
+          path: 'models\\does_not_commute\\table.glb',
+          position: new THREE.Vector3(-0.6, 0.05, 1.0),
+          rotation: new THREE.Euler(0, 0, 0),
+          scale: new THREE.Vector3(0.04, 0.04, 0.04),
+          material: materialParams,
+          customMaterial: undefined
+        },
       ];
       Promise.all(
         modelsToLoad.map(model => {
