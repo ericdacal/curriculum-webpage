@@ -306,6 +306,22 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
       pointLight.shadow.bias = -0.0001;
       scene.add(pointLight);
 
+
+
+       /////// AUDIO SETUP ///////
+      //  const listener = new THREE.AudioListener();
+      //  camera.add(listener);
+ 
+      //  const sound = new THREE.Audio(listener);
+      //  const audioLoader = new THREE.AudioLoader();
+      //  audioLoader.load('audio/canteen.wav', (buffer) => {
+      //    sound.setBuffer(buffer);
+      //    sound.setLoop(true);
+      //    sound.setVolume(0.5);
+      //    sound.play();
+      //  });
+       ////////////////////////////
+
       ////////////////////////////
 
       /////// EQUIRECTANGULAR BACKGROUND ///////

@@ -1,4 +1,4 @@
-import React, {FC, memo, useRef, useState} from 'react';
+import React, { FC, memo, useEffect, useRef, useState } from 'react';
 
 import DoesNotCommute from './scenes/doesnotcommutescene';
 import StarfallScene from './scenes/starfallscene';
@@ -9,6 +9,15 @@ const Portfolio: FC = memo(() => {
   const [isSceneLoaded, setIsSceneLoaded] = useState(false);
   const [isAnimationDone, setIsAnimationDone] = useState(false);
   const [currentScene, setCurrentScene] = useState(0);
+  const [isStarted, setIsStarted] = useState(false); // Nueva variable de estado para controlar el inicio
+
+  const sceneMusicMap = [
+    'audio\\canteen.wav',
+    'audio\\canteen.wav',
+    'audio\\canteen.wav'
+  ];
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const scenes = [
     {
@@ -49,27 +58,59 @@ const Portfolio: FC = memo(() => {
     },
   ];
 
-  // /////// HTML HANDLERS ///////
-  //  // Handler for the left arrow click
-  const handleLeftArrowClick = () => {
-    setIsSceneLoaded(false);
-    setCurrentScene(currentScene => currentScene - 1);
-    // Implement what happens when the left arrow is clicked
-    // For example, rotate the scene, move the camera, etc.
+  const startExperience = () => {
+    setIsStarted(true);
+
+    const newAudio = new Audio(sceneMusicMap[currentScene]);
+    newAudio.loop = true;
+    newAudio.play();
+    audioRef.current = newAudio;
   };
 
-  // // Handler for the right arrow click
+  useEffect(() => {
+    if (isStarted) {
+      // Detener la música actual si existe
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+
+      // Crear un nuevo elemento de audio y reproducir la nueva pista
+      const newAudio = new Audio(sceneMusicMap[currentScene]);
+      newAudio.loop = true;
+      newAudio.play();
+      audioRef.current = newAudio;
+
+      // Limpiar el audio cuando el componente se desmonte
+      return () => {
+        if (audioRef.current) {
+          audioRef.current.pause();
+          audioRef.current = null;
+        }
+      };
+    }
+    return () => {}
+  }, [currentScene, isStarted]);
+
+  const handleLeftArrowClick = () => {
+    setIsSceneLoaded(false);
+    setCurrentScene((currentScene) => currentScene - 1);
+  };
+
   const handleRightArrowClick = () => {
     setIsSceneLoaded(false);
-    setCurrentScene(currentScene => currentScene + 1);
-    // Implement what happens when the right arrow is clicked
-    // For example, rotate the scene, move the camera, etc.
+    setCurrentScene((currentScene) => currentScene + 1);
   };
-  // ////////////////////////////
+
+  if (!isStarted) {
+    return (
+      <div className="start-screen">
+        <button onClick={startExperience}>Start Experience</button>
+      </div>
+    );
+  }
 
   return (
     <div className="screen">
-      {/* Conditional rendering of the loading indicator */}
       {!isSceneLoaded || !isAnimationDone ? (
         <div className="crt loading-text">
           <h1>Loading...</h1>
@@ -77,13 +118,13 @@ const Portfolio: FC = memo(() => {
       ) : null}
       {isSceneLoaded && isAnimationDone ? (
         <div>
-          {currentScene > 0 && ( // Check if currentScene is greater than 1
+          {currentScene > 0 && (
             <button className="arrow left-arrow" onClick={handleLeftArrowClick}>
               &lt;
             </button>
           )}
-          {currentScene < (scenes.length-1) && (
-              <button className="arrow right-arrow" onClick={handleRightArrowClick}>
+          {currentScene < scenes.length - 1 && (
+            <button className="arrow right-arrow" onClick={handleRightArrowClick}>
               &gt;
             </button>
           )}
@@ -91,7 +132,6 @@ const Portfolio: FC = memo(() => {
             {`
               .portfolio-container {
                 position: relative;
-                /* Your container styles */
               }
               .arrow {
                 position: fixed;
@@ -116,4 +156,5 @@ const Portfolio: FC = memo(() => {
     </div>
   );
 });
+
 export default Portfolio;
