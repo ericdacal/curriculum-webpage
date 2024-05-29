@@ -9,7 +9,8 @@ const Portfolio: FC = memo(() => {
   const [isSceneLoaded, setIsSceneLoaded] = useState(false);
   const [isAnimationDone, setIsAnimationDone] = useState(false);
   const [currentScene, setCurrentScene] = useState(0);
-  const [isStarted, setIsStarted] = useState(false); // Nueva variable de estado para controlar el inicio
+  const [isStarted, setIsStarted] = useState(false); 
+  const [isAudioPlaying, setIsAudioPlaying] = useState(true); 
 
   const sceneMusicMap = [
     'audio\\canteen.wav',
@@ -60,27 +61,31 @@ const Portfolio: FC = memo(() => {
 
   const startExperience = () => {
     setIsStarted(true);
+  };
 
-    const newAudio = new Audio(sceneMusicMap[currentScene]);
-    newAudio.loop = true;
-    newAudio.play();
-    audioRef.current = newAudio;
+  const toggleAudio = () => {
+    if (audioRef.current) {
+      if (isAudioPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsAudioPlaying(!isAudioPlaying);
+    }
   };
 
   useEffect(() => {
-    if (isStarted) {
-      // Detener la música actual si existe
+    if (isStarted && isSceneLoaded && isAnimationDone) {
       if (audioRef.current) {
         audioRef.current.pause();
       }
 
-      // Crear un nuevo elemento de audio y reproducir la nueva pista
       const newAudio = new Audio(sceneMusicMap[currentScene]);
       newAudio.loop = true;
       newAudio.play();
       audioRef.current = newAudio;
+      setIsAudioPlaying(true);
 
-      // Limpiar el audio cuando el componente se desmonte
       return () => {
         if (audioRef.current) {
           audioRef.current.pause();
@@ -88,8 +93,8 @@ const Portfolio: FC = memo(() => {
         }
       };
     }
-    return () => {}
-  }, [currentScene, isStarted]);
+    return () => {};
+  }, [currentScene, isStarted, isSceneLoaded, isAnimationDone]);
 
   const handleLeftArrowClick = () => {
     setIsSceneLoaded(false);
@@ -128,6 +133,9 @@ const Portfolio: FC = memo(() => {
               &gt;
             </button>
           )}
+          <button className="audio-toggle" onClick={toggleAudio}>
+            {isAudioPlaying ? '🔊' : '🔇'}
+          </button>
           <style>
             {`
               .portfolio-container {
@@ -147,6 +155,16 @@ const Portfolio: FC = memo(() => {
               }
               .right-arrow {
                 right: 10px;
+              }
+              .audio-toggle {
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                background-color: transparent;
+                border: none;
+                font-size: 30px;
+                cursor: pointer;
+                z-index: 10;
               }
             `}
           </style>
