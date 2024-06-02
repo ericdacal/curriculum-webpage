@@ -370,3 +370,44 @@ th {
 .custom-carousel .carousel-caption {
   background-color: transparent; /* Remove the background color of the caption */
 }
+
+.start-screen-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url('/background-scene.png');
+  background-size: cover;
+  background-position: center;
+}
+
+.start-screen {
+  width: 300px; /* Ajusta este valor para el tamaño del cuadrado */
+  height: 300px; /* Ajusta este valor para el tamaño del cuadrado */
+  background-color: #9e9c9cab;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  text-align: center;
+}
+
+.start-screen h1 {
+  margin: 0;
+}
+
+.start-screen button {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007BFF;
+  color: white;
+  cursor: pointer;
+}
+
+.start-screen button:hover {
+  background-color: #0056b3;
+}

@@ -153,6 +153,16 @@ const ArgochamberScene: FC<ArgochamberSceneProps> = memo(
         'https://eric-dacal.vercel.app/doesnotcommute',
       );
       ////////////////////////////
+
+
+      /////// EQUIRECTANGULAR BACKGROUND ///////
+      const textureLoader = new THREE.TextureLoader();
+      textureLoader.load('background-scene.png', function (texture) {
+        const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+        rt.fromEquirectangularTexture(renderer, texture);
+        scene.background = rt.texture;
+      });
+      ////////////////////////////
       
       
       ////////////////////////////
