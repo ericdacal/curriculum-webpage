@@ -14,8 +14,8 @@ const Portfolio: FC = memo(() => {
 
   const sceneMusicMap = [
     'audio\\canteen.wav',
-    'audio\\canteen.wav',
-    'audio\\canteen.wav'
+    'audio\\does_not_commute.m4a',
+    'audio\\spaceship.m4a'
   ];
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
@@ -108,8 +108,11 @@ const Portfolio: FC = memo(() => {
 
   if (!isStarted) {
     return (
-      <div className="start-screen">
-        <button onClick={startExperience}>Start Experience</button>
+      <div className="start-screen-container">
+        <div className="start-screen">
+          <h1>Welcome!</h1>
+          <button onClick={startExperience}>Start Experience</button>
+        </div>
       </div>
     );
   }
