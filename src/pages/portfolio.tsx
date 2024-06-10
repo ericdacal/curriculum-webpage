@@ -110,7 +110,8 @@ const Portfolio: FC = memo(() => {
     return (
       <div className="start-screen-container">
         <div className="start-screen">
-          <h1>Welcome!</h1>
+          <h1>Interactive Portfolio</h1>
+          <h3>This is an interactive portfolio that use Three.js. It is recommend to use a Computer with GPU. You only need to use a mouse to move between the scenes.</h3>
           <button onClick={startExperience}>Start Experience</button>
         </div>
       </div>

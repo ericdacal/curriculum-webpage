@@ -376,7 +376,7 @@ th {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-image: url('/background-scene.png');
+  background-image: url('/header-background.webp');
   background-size: cover;
   background-position: center;
 }
@@ -386,17 +386,23 @@ th {
   height: 300px; /* Ajusta este valor para el tamaño del cuadrado */
   background-color: #9e9c9cab;
   border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 20px;
   text-align: center;
+  font-family: 'Lato', sans-serif;
 }
 
 .start-screen h1 {
   margin: 0;
+  color: #DDDDDD;
 }
+.start-screen h3 {
+  color: #DDDDDD;
+}
+
 
 .start-screen button {
   padding: 10px 20px;
