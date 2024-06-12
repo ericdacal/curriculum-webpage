@@ -152,6 +152,7 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
         camera,
         mountRef.current,
         'https://eric-dacal.vercel.app/starfall',
+        new THREE.Vector3(-0.0153, 0.39, 0.57)
       );
       ////////////////////////////
       // const emissionMaterialParams = {
