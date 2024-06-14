@@ -166,13 +166,6 @@ const DoesNotCommuteScene: FC<DoesNotCommuteSceneProps> = memo(
       const groundNormalMap = new THREE.TextureLoader().load('ground\\Ground_normal.png');
       groundNormalMap.repeat.set(repeatValueGround, repeatValueGround);
       groundNormalMap.wrapS = groundNormalMap.wrapT = THREE.RepeatWrapping;
-      const groundMaterial = {
-        map: groundBaseColor, // base color texture
-        metalnessMap: groundMetallicMap, // metallic texture
-        normalMap: groundNormalMap, // normal map texture
-        receiveShadow: true,
-      };
-
       ////////////////////////////
 
       /////// Wall MATERIAL ///////
@@ -186,26 +179,12 @@ const DoesNotCommuteScene: FC<DoesNotCommuteSceneProps> = memo(
       const wallNormalMap = new THREE.TextureLoader().load('wall\\BarWall_normal.png');
       wallNormalMap.repeat.set(repeatValueWall, 2);
       wallNormalMap.wrapS = wallNormalMap.wrapT = THREE.RepeatWrapping;
-      const wallMaterial = {
-        map: wallBaseColor, // base color texture
-        metalnessMap: wallMetallicMap, // metallic texture
-        normalMap: wallNormalMap, // normal map texture
-        receiveShadow: true,
-      };
-      const emissionMaterialParams = {
-        color: 0x00ff00, // Base color of the material
-        emissive: 0xff0000, // Emissive color (red in this case)
-        emissiveIntensity: 2.5, // Intensity of the emissive effect
-      };
       ////////////////////////////
       ////////////////////////////
 
       //const materialParams = {color: 0xbcbcbc, roughness: 0.1, metalness: 0}
       const materialParams = {color: 0xffffff};
       const modelType: ModelType = 'gltf';
-      const boxType: ModelType = 'box';
-      //const planeType: ModelType = 'plane';
-      const cylinderType: ModelType = 'cylinder';
 
       /////// MODELS LOAD  ///////
       const modelsToLoad = [
@@ -218,41 +197,13 @@ const DoesNotCommuteScene: FC<DoesNotCommuteSceneProps> = memo(
           material: materialParams,
           customMaterial: undefined,
         },
-        //{type: planeType, path: '', position: new THREE.Vector3(-0.02,0.4,0.05), rotation: new THREE.Euler(0,2*Math.PI,0), scale: new THREE.Vector3(0.2,0.17,1), material: materialParams, customMaterial: crtMaterial},
         {
-          type: boxType,
-          path: '',
-          position: new THREE.Vector3(0, -0.1, 0),
-          rotation: new THREE.Euler(Math.PI / 2, 0, 0),
-          scale: new THREE.Vector3(100, 100, 0.1),
-          material: groundMaterial,
-          customMaterial: undefined,
-        },
-        {
-          type: boxType,
-          path: '',
-          position: new THREE.Vector3(0, 0.5, -0.7),
+          type: modelType,
+          path: 'models\\does_not_commute\\doesnotcommute_wall.glb',
+          position: new THREE.Vector3(-0.9, 0.34, -0.3),
           rotation: new THREE.Euler(0, 0, 0),
-          scale: new THREE.Vector3(15, 1, 1),
-          material: wallMaterial,
-          customMaterial: undefined,
-        },
-        {
-          type: boxType,
-          path: '',
-          position: new THREE.Vector3(-1.5, 0.5, -0.7),
-          rotation: new THREE.Euler(0, Math.PI / 2, 0),
-          scale: new THREE.Vector3(15, 1, 1),
-          material: wallMaterial,
-          customMaterial: undefined,
-        },
-        {
-          type: cylinderType,
-          path: '',
-          position: new THREE.Vector3(0, 0, -0.183),
-          rotation: new THREE.Euler(0, 0, Math.PI / 2),
-          scale: new THREE.Vector3(0.02, 10, 0.02),
-          material: emissionMaterialParams,
+          scale: new THREE.Vector3(0.2, 0.2, 0.2),
+          material: materialParams,
           customMaterial: undefined,
         },
         {
@@ -339,12 +290,12 @@ const DoesNotCommuteScene: FC<DoesNotCommuteSceneProps> = memo(
       ////////////////////////////
 
       /////// EQUIRECTANGULAR BACKGROUND ///////
-      // const textureLoader = new THREE.TextureLoader();
-      // textureLoader.load('background-scene.png', function(texture) {
-      //   const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
-      //   rt.fromEquirectangularTexture(renderer, texture);
-      //   scene.background = rt.texture;
-      // });
+      const textureLoader = new THREE.TextureLoader();
+      textureLoader.load('low_poly.jpg', function(texture) {
+        const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
+        rt.fromEquirectangularTexture(renderer, texture);
+        scene.background = rt.texture;
+      });
       ////////////////////////////
 
       if (mountRef.current) {

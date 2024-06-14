@@ -158,7 +158,7 @@ const ArgochamberScene: FC<ArgochamberSceneProps> = memo(
 
       /////// EQUIRECTANGULAR BACKGROUND ///////
       const textureLoader = new THREE.TextureLoader();
-      textureLoader.load('background-scene.png', function (texture) {
+      textureLoader.load('space.png', function (texture) {
         const rt = new THREE.WebGLCubeRenderTarget(texture.image.height);
         rt.fromEquirectangularTexture(renderer, texture);
         scene.background = rt.texture;
@@ -188,7 +188,7 @@ const ArgochamberScene: FC<ArgochamberSceneProps> = memo(
         {
           type: modelType,
           path: 'futuristic_computer.glb',
-          position: new THREE.Vector3(0, 0.02, 0.65),
+          position: new THREE.Vector3(0, 0.016, 0.65),
           rotation: new THREE.Euler(0, (3 * Math.PI) / 2),
           scale: new THREE.Vector3(0.08, 0.08, 0.08),
           material: materialParams,
