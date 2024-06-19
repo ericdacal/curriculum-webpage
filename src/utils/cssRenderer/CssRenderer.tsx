@@ -1,7 +1,7 @@
 import {Camera, Scene, Vector3} from 'three';
 import {CSS3DObject, CSS3DRenderer} from 'three/examples/jsm/renderers/CSS3DRenderer';
 
-export const setupCssRenderer = (scene: Scene, camera: Camera, container: HTMLDivElement, src: string, position: Vector3) => {
+export const setupCssRenderer = (scene: Scene, camera: Camera, container: HTMLDivElement, src: string, position: Vector3,  scale: Vector3) => {
   /////// Iframe Config ///////
   const iframeElement = document.createElement('iframe');
   iframeElement.src = src;
@@ -14,7 +14,9 @@ export const setupCssRenderer = (scene: Scene, camera: Camera, container: HTMLDi
   cssObject.position.copy(position);
   //cssObject.position.set(-0.0153, 0.39, 0.57); // Position as needed
   cssObject.rotation.x = 0;
-  cssObject.scale.set(0.00026, 0.0003, 0.00028);
+  cssObject.scale.copy(scale);
+  
+  //cssObject.scale.set(0.00026, 0.0003, 0.00028);
 
   scene.add(cssObject);
 

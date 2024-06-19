@@ -150,7 +150,8 @@ const DoesNotCommuteScene: FC<DoesNotCommuteSceneProps> = memo(
         camera,
         mountRef.current,
         'http://localhost:3000/doesnotcommute',
-        new THREE.Vector3(-0.0153, 0.39, 0.025)
+        new THREE.Vector3(-0.0153, 0.39, 0.025),
+        new THREE.Vector3(0.00026, 0.0003, 0.00028)
       );
       ////////////////////////////
 

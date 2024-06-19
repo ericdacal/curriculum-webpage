@@ -151,7 +151,8 @@ const ArgochamberScene: FC<ArgochamberSceneProps> = memo(
         camera,
         mountRef.current,
         'https://eric-dacal.vercel.app/doesnotcommute',
-        new THREE.Vector3(-0.0153, 0.39, 0.57)
+        new THREE.Vector3(-0.0153, 0.24, 0.57),
+        new THREE.Vector3(0.0004, 0.0003, 0.00028)
       );
       ////////////////////////////
 
