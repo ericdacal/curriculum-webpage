@@ -151,7 +151,7 @@ const StarfallScene: FC<StarfallSceneProps> = memo(
         scene,
         camera,
         mountRef.current,
-        'http://eric-dacal.vercel.app/starfall',
+        'https://eric-dacal.vercel.app/starfall',
         new THREE.Vector3(-0.0153, 0.39, 0.57),
         new THREE.Vector3(0.00026, 0.0003, 0.00028)
       );

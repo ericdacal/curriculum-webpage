@@ -61,9 +61,9 @@ const Starfall: FC = memo(() => {
         </Carousel.Item>
         <Carousel.Item>
           <div className="carousel-background">
-            <img alt="Sixth slide" src="slides/starfall/slide_base.png" className="background-image"></img>
-            <img alt="Bix VFX" src="slides/starfall/bix_vfx.gif" className="overlay-gif gif1"></img>
-            <img alt="Allura VFX" src="slides/starfall/allura_vfx.gif" className="overlay-gif gif2"></img>
+            <img alt="Sixth slide" src="slides/starfall/slide_5.png" className="background-image"></img>
+            <img alt="Bix VFX" src="slides/starfall/bix_vfx.gif" className="overlay-gif gif3"></img>
+            <img alt="Allura VFX" src="slides/starfall/alura_vfx.gif" className="overlay-gif gif4"></img>
           </div>
           <Carousel.Caption>
             <h1>VFX for main character</h1>
