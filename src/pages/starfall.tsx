@@ -73,8 +73,36 @@ const Starfall: FC = memo(() => {
         <Carousel.Item>
           <img alt="Seventh slide" src="slides/starfall/slide0.webp"></img>
           <Carousel.Caption>
-            <h1>Other Models</h1>
-            <p>Another models</p>
+            <h1>Engine Skybox System</h1>
+            <p>Working in a system to can change between diferent Skybox in scene</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+        <Carousel.Item>
+          <img alt="Seventh slide" src="slides/starfall/slide0.webp"></img>
+          <Carousel.Caption>
+            <h1>Engine Cubemap System</h1>
+            <p>Working in a system to can change between diferent Cubemaps in scene</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+        <Carousel.Item>
+          <img alt="Eighth slide" src="slides/starfall/slide0.webp"></img>
+          <Carousel.Caption>
+            <h1>Emisson Map</h1>
+            <p>Working in Emission Map integration in Engine</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+        <Carousel.Item>
+          <img alt="Seventh slide" src="slides/starfall/slide0.webp"></img>
+          <Carousel.Caption>
+            <h1>Texture Compression Integration</h1>
+            <p>Implementation of Texture Compression in Engine</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+        <Carousel.Item>
+          <img alt="Seventh slide" src="slides/starfall/slide0.webp"></img>
+          <Carousel.Caption>
+            <h1>Integration of Video Component in Engine</h1>
+            <p>Implementation of Video Component in Engine to can reproduce Cutscenes</p>
           </Carousel.Caption>
         </Carousel.Item>
       </Carousel>
