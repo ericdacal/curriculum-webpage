@@ -71,35 +71,49 @@ const Starfall: FC = memo(() => {
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
-          <img alt="Seventh slide" src="slides/starfall/slide0.webp"></img>
+          <div className="carousel-background">
+            <img alt="Sixth slide" src="slides/starfall/slide_6.png" className="background-image"></img>
+            <img alt="Skybox" src="slides/starfall/skybox.gif" className="overlay-gif gif5"></img>
+            <img alt="Skybox Image" src="slides/starfall/skybox_select.png" className="overlay-gif gif6"></img>
+          </div>
           <Carousel.Caption>
             <h1>Engine Skybox System</h1>
             <p>Working in a system to can change between diferent Skybox in scene</p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
-          <img alt="Seventh slide" src="slides/starfall/slide0.webp"></img>
+          <div className="carousel-background">
+            <img alt="Sixth slide" src="slides/starfall/slide_6.png" className="background-image"></img>
+            <img alt="Skybox" src="slides/starfall/cubemap.gif" className="overlay-gif gif3"></img>
+           
+          </div>
           <Carousel.Caption>
             <h1>Engine Cubemap System</h1>
             <p>Working in a system to can change between diferent Cubemaps in scene</p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
-          <img alt="Eighth slide" src="slides/starfall/slide0.webp"></img>
+          <div className="carousel-background">
+            <img alt="Sixth slide" src="slides/starfall/slide_6.png" className="background-image"></img>
+          </div>
           <Carousel.Caption>
             <h1>Emisson Map</h1>
             <p>Working in Emission Map integration in Engine</p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
-          <img alt="Seventh slide" src="slides/starfall/slide0.webp"></img>
+          <div className="carousel-background">
+            <img alt="Sixth slide" src="slides/starfall/slide_6.png" className="background-image"></img>
+          </div>
           <Carousel.Caption>
             <h1>Texture Compression Integration</h1>
             <p>Implementation of Texture Compression in Engine</p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
-          <img alt="Seventh slide" src="slides/starfall/slide0.webp"></img>
+          <div className="carousel-background">
+            <img alt="Sixth slide" src="slides/starfall/slide_6.png" className="background-image"></img>
+          </div>
           <Carousel.Caption>
             <h1>Integration of Video Component in Engine</h1>
             <p>Implementation of Video Component in Engine to can reproduce Cutscenes</p>

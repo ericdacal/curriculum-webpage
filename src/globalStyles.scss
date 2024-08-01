@@ -412,8 +412,8 @@ th {
 .gif3 {
   width: 290px;
   height:164px;
-  top: 45%;
-  left: 70%;
+  top: 55%;
+  left: 60%;
 }
 
 .gif4 {
@@ -421,6 +421,19 @@ th {
   height:164px;
   top: 10%;
   left: 5%;
+}
+
+.gif5 {
+  width: 345px;
+  height:146px;
+  top: 15%;
+  left: 6%;
+}
+.gif6 {
+  width: 345px;
+  height:146px;
+  top: 48%;
+  left: 50%;
 }
 
 .custom-carousel .carousel-caption {
@@ -438,8 +451,8 @@ th {
 }
 
 .start-screen {
-  width: 300px; /* Ajusta este valor para el tamaño del cuadrado */
-  height: 300px; /* Ajusta este valor para el tamaño del cuadrado */
+  width: 350px; /* Ajusta este valor para el tamaño del cuadrado */
+  height: 400px; /* Ajusta este valor para el tamaño del cuadrado */
   background-color: #9e9c9cab;
   border-radius: 15px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
@@ -453,11 +466,16 @@ th {
 
 .start-screen h1 {
   margin: 0;
-  color: #DDDDDD;
+  font-size: 2em;
+  color: #FFFFFFFF;
 }
 .start-screen h3 {
-  color: #DDDDDD;
+  color: #FFFFFFFF;
 }
+.start-screen a {
+  color: rgb(229, 255, 0);
+}
+
 
 
 .start-screen button {
