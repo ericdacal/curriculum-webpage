@@ -40,19 +40,13 @@ const Starfall: FC = memo(() => {
             <p>I model and texture some props and enviroment models</p>
           </Carousel.Caption>
         </Carousel.Item>
-        <Carousel.Item>
-          <img alt="Fifth slide" src="slides/starfall/slide0.webp"></img>
-          <Carousel.Caption>
-            <h1>Second Level</h1>
-            <p>Desing, modelling and animation second level items</p>
-          </Carousel.Caption>
-        </Carousel.Item>
+        
         <Carousel.Item>
           <div className="carousel-background">
             <img alt="Fifth slide" src="slides/starfall/slide_base.png" className="background-image"></img>
-            <img alt="Character 1" src="slides/starfall/bith_animation.gif" className="overlay-gif gif1"></img>
-            <img alt="Character 2" src="slides/starfall/human_animation.gif" className="overlay-gif gif2"></img>
-            <img alt="Character 2" src="slides/starfall/bix_animation.gif" className="overlay-gif gif3"></img>
+            <img alt="Character 1" src="slides/starfall/bith_animation.gif" className="overlay-gif" style={{ width: '409px', height: '220px', top: "35%", left:"-3%" }} ></img>
+            <img alt="Character 2" src="slides/starfall/human_animation.gif" className="overlay-gif" style={{  width: "409px",height:"220px",top: "35%",left:"30%" }}></img>
+            <img alt="Character 2" src="slides/starfall/bix_animation.gif" className="overlay-gif" style={{  width: "320px",height:"264px",top: "25%", left: "64%" }}></img>
           </div>
           <Carousel.Caption>
             <h1>Animated Characters</h1>
@@ -61,20 +55,32 @@ const Starfall: FC = memo(() => {
         </Carousel.Item>
         <Carousel.Item>
           <div className="carousel-background">
-            <img alt="Sixth slide" src="slides/starfall/slide_5.png" className="background-image"></img>
-            <img alt="Bix VFX" src="slides/starfall/bix_vfx.gif" className="overlay-gif gif3"></img>
-            <img alt="Allura VFX" src="slides/starfall/alura_vfx.gif" className="overlay-gif gif4"></img>
+            <img alt="Sixth slide" src="slides/starfall/slide_6.png" className="background-image"></img>
+            <img alt="Character 1" src="slides/starfall/animation1.gif" className="overlay-gif" style={{  width: "390px",height:"164px",top: "42%", left: "40%" }}></img>
+            <img alt="Character 2" src="slides/starfall/animation2.gif" className="overlay-gif" style={{ width: "390px",height:"164px",top: "15%",left: "10%"}}></img>
+          </div>
+          <Carousel.Caption>
+            <h1>Animated Characters</h1>
+            <p>Creation of animation for Character</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+        <Carousel.Item>
+          <div className="carousel-background">
+            <img alt="Sixth slide" src="slides/starfall/slide_6.png" className="background-image"></img>
+            <img alt="Bix VFX" src="slides/starfall/bix_vfx.gif" className="overlay-gif" style={{  width: "290px",height:"164px",top: "55%", left: "60%" }}></img>
+            <img alt="Allura VFX" src="slides/starfall/alura_vfx.gif" className="overlay-gif" style={{ width: "290px",height:"164px",top: "10%",left: "5%"}}></img>
           </div>
           <Carousel.Caption>
             <h1>VFX for main character</h1>
             <p>Creation and design of VFX for some skill of main characters</p>
           </Carousel.Caption>
         </Carousel.Item>
+        
         <Carousel.Item>
           <div className="carousel-background">
             <img alt="Sixth slide" src="slides/starfall/slide_6.png" className="background-image"></img>
-            <img alt="Skybox" src="slides/starfall/skybox.gif" className="overlay-gif gif5"></img>
-            <img alt="Skybox Image" src="slides/starfall/skybox_select.png" className="overlay-gif gif6"></img>
+            <img alt="Skybox" src="slides/starfall/skybox.gif" className="overlay-gif" style={{ width: "345px",height:"146px",top: "15%",left: "6%" }}></img>
+            <img alt="Skybox Image" src="slides/starfall/skybox_select.png" className="overlay-gif" style={{ width: "345px",height:"146px",top: "48%",left: "50%" }}></img>
           </div>
           <Carousel.Caption>
             <h1>Engine Skybox System</h1>
@@ -84,8 +90,7 @@ const Starfall: FC = memo(() => {
         <Carousel.Item>
           <div className="carousel-background">
             <img alt="Sixth slide" src="slides/starfall/slide_6.png" className="background-image"></img>
-            <img alt="Skybox" src="slides/starfall/cubemap.gif" className="overlay-gif gif3"></img>
-           
+            <img alt="Skybox" src="slides/starfall/cubemap.gif" className="overlay-gif" style={{ width: "710px",height:"232px",top: "20%",left: "5%" }}></img>
           </div>
           <Carousel.Caption>
             <h1>Engine Cubemap System</h1>
