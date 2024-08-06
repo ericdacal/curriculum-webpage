@@ -67,8 +67,8 @@ const Starfall: FC = memo(() => {
         <Carousel.Item>
           <div className="carousel-background">
             <img alt="Sixth slide" src="slides/starfall/slide_6.png" className="background-image"></img>
-            <img alt="Bix VFX" src="slides/starfall/bix_vfx.gif" className="overlay-gif" style={{  width: "290px",height:"164px",top: "55%", left: "60%" }}></img>
-            <img alt="Allura VFX" src="slides/starfall/alura_vfx.gif" className="overlay-gif" style={{ width: "290px",height:"164px",top: "10%",left: "5%"}}></img>
+            <img alt="Allura VFX" src="slides/starfall/alura_vfx.gif" className="overlay-gif" style={{ width: "370px",height:"244px",top: "10%",left: "8%"}}></img>
+            <img alt="Bix VFX" src="slides/starfall/bix_vfx.gif" className="overlay-gif" style={{  width: "390px",height:"264px",top: "40%", left: "55%" }}></img>
           </div>
           <Carousel.Caption>
             <h1>VFX for main character</h1>
@@ -100,6 +100,7 @@ const Starfall: FC = memo(() => {
         <Carousel.Item>
           <div className="carousel-background">
             <img alt="Sixth slide" src="slides/starfall/slide_6.png" className="background-image"></img>
+            <img alt="Emission Map" src="slides/starfall/emission.webp" className="overlay-gif" style={{ width: "690px",height:"212px",top: "20%",left: "8%" }}></img>
           </div>
           <Carousel.Caption>
             <h1>Emisson Map</h1>
@@ -109,6 +110,7 @@ const Starfall: FC = memo(() => {
         <Carousel.Item>
           <div className="carousel-background">
             <img alt="Sixth slide" src="slides/starfall/slide_6.png" className="background-image"></img>
+            <img alt="Emission Map" src="slides/starfall/slide0.webp" className="overlay-gif" style={{ width: "690px",height:"312px",top: "15%",left: "8%" }}></img>
           </div>
           <Carousel.Caption>
             <h1>Texture Compression Integration</h1>
@@ -118,6 +120,7 @@ const Starfall: FC = memo(() => {
         <Carousel.Item>
           <div className="carousel-background">
             <img alt="Sixth slide" src="slides/starfall/slide_6.png" className="background-image"></img>
+            <video loop autoPlay muted src="slides/starfall/videocomponent.mp4" className="overlay-gif" style={{ width: "680px",height:"216px",top: "20%",left: "0%" }}></video>
           </div>
           <Carousel.Caption>
             <h1>Integration of Video Component in Engine</h1>
