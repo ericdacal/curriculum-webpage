@@ -9,7 +9,7 @@ const Starfall: FC = memo(() => {
           <img alt="Presentation slide" src="slides/starfall/1.png"></img>
           <Carousel.Caption>
             <h1>Starfall Rebellion</h1>
-            <p>Master's Degree Project, where we develop a  Lego Star Wars game<a href="https://starfall-rebellion.vercel.app/" target="_blank">(Web)</a><a href="https://github.com/Horizons-Games/Axolotl-Engine" target="_blank">(Github)</a></p>
+            <p>Master's Degree Project, where we develop a  Lego Star Wars game<a href="https://starfall-rebellion.vercel.app/" target="_blank">(Web)</a><a href="https://github.com/Horizons-Games/Axolotl-Engine" target="_blank">(Github)</a><a href="https://www.youtube.com/watch?v=FnFNDrElq48" target="_blank">(Gameplay)</a></p>
           </Carousel.Caption>
         </Carousel.Item>
         <Carousel.Item>
@@ -120,11 +120,22 @@ const Starfall: FC = memo(() => {
         <Carousel.Item>
           <div className="carousel-background">
             <img alt="Sixth slide" src="slides/starfall/slide_6.png" className="background-image"></img>
-            <video loop autoPlay muted src="slides/starfall/videocomponent.mp4" className="overlay-gif" style={{ width: "680px",height:"216px",top: "20%",left: "0%" }}></video>
+            <video loop autoPlay muted src="slides/starfall/videocomponent.mp4" className="overlay-gif" style={{ width: "371px",height:"254px",top: "15%",left: "5%" }}></video>
+            <video loop autoPlay muted src="slides/starfall/videocomponent2.mp4" className="overlay-gif" style={{ width: "480px",height:"199px",top: "45%",left: "35%" }}></video>
           </div>
           <Carousel.Caption>
             <h1>Integration of Video Component in Engine</h1>
             <p>Implementation of Video Component in Engine to can reproduce Cutscenes</p>
+          </Carousel.Caption>
+        </Carousel.Item>
+        <Carousel.Item>
+          <div className="carousel-background">
+            <img alt="Sixth slide" src="slides/starfall/slide_6.png" className="background-image"></img>
+            <video loop autoPlay muted src="slides/starfall/cutscene1.mp4" className="overlay-gif" style={{ width: "480px",height:"199px",top: "25%",left: "20%" }}></video>
+          </div>
+          <Carousel.Caption>
+            <h1>Creation of Cutscene</h1>
+            <p>Creation and Rendering of Cutscene using Blender</p>
           </Carousel.Caption>
         </Carousel.Item>
       </Carousel>
